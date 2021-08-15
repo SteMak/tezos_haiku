@@ -4,7 +4,7 @@
   "description": "Contract for tezos_haiku project",
   "author": "SteMak",
   "license": "MIT",
-  "homepage": "https://better-call.dev/florencenet/KT1HENdSq6gnGcsY73ib2sGmhbbPR5gyRW1n/operations",
+  "homepage": "https://better-call.dev/florencenet/KT1LA2aMYXi4DVLQMtxQZZEbvW9eRnBUwxnk/operations",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SteMak/tezos_haiku.git"

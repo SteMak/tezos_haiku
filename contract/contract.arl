@@ -325,7 +325,7 @@ entry token_report (tid: nat, rep_author: string, rep_link: string) {
   require {
     tr_token_exists otherwise "Selected token doesn't exist!": token.count() > tid;
     tr_valid_token_state otherwise "Voting for this token has alrealdy finished!": token[tid].state = proposed;
-    tr_valid_token_time otherwise "Reporting time has alrealdy finished!": token[tid].crted_at + min_voted_time <= now;
+    tr_valid_token_time otherwise "Reporting time has alrealdy finished!": token[tid].crted_at + min_voted_time > now;
     tr_real_link otherwise "Please, provide link in length bounds!": 0 < length(rep_link) <= max_max_report_url;
     tr_real_author otherwise "Please, provide author in length bounds!": 0 < length(rep_author) <= max_max_report_author;
     tr_spam otherwise "You have already reported about this haiku!": isnt_already_reported(caller, tid);
