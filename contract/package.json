@@ -2,9 +2,13 @@
   "name": "tezos_haiku_contract",
   "version": "1.0.0",
   "description": "Contract for tezos_haiku project",
-  "main": "contract.arl",
   "author": "SteMak",
   "license": "MIT",
+  "homepage": "https://better-call.dev/florencenet/KT1HENdSq6gnGcsY73ib2sGmhbbPR5gyRW1n/operations",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SteMak/tezos_haiku.git"
+  },
   "devDependencies": {
     "@completium/completium-cli": "^0.1.20"
   }

@@ -4,25 +4,9 @@
   "description": "Site and blockchain contract for tezos_haiku project",
   "author": "SteMak",
   "license": "MIT",
-  "scripts": {
-    "dev": "parcel site/src/html/index.html",
-    "build": "parcel build site/src/html/index.html --public-url /tezos_haiku/",
-    "deploy": "gh-pages -d dist",
-    "predeploy": "yarn build"
-  },
+  "homepage": "https://SteMak.github.io/tezos_haiku",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SteMak/tezos_haiku.git"
-  },
-  "homepage": "https://SteMak.github.io/tezos_haiku",
-  "devDependencies": {
-    "@parcel/transformer-image": "2.0.0-rc.0",
-    "parcel": "^2.0.0-rc.0"
-  },
-  "dependencies": {
-    "@airgap/beacon-sdk": "^2.3.1",
-    "@taquito/beacon-wallet": "^10.0.0",
-    "@taquito/taquito": "^10.0.0",
-    "gh-pages": "^3.1.0"
   }
 }

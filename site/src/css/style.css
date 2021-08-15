@@ -130,7 +130,7 @@ footer {
 }
 
 .container__ {
-  top: 10%;
+  top: calc((100% - 800px)/2);;
   left: calc((100% - 500px)/2);
 
   position: fixed;

@@ -5,8 +5,16 @@
   "author": "SteMak",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel src/html/index.html"
+    "dev": "parcel src/html/index.html",
+    "build": "parcel build src/html/index.html --public-url /tezos_haiku/ --no-scope-hoist" ,
+    "deploy": "gh-pages -d dist",
+    "predeploy": "yarn build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SteMak/tezos_haiku.git"
+  },
+  "homepage": "https://SteMak.github.io/tezos_haiku",
   "devDependencies": {
     "@parcel/transformer-image": "2.0.0-rc.0",
     "parcel": "^2.0.0-rc.0"
@@ -14,6 +22,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.1",
     "@taquito/beacon-wallet": "^10.0.0",
-    "@taquito/taquito": "^10.0.0"
+    "@taquito/taquito": "^10.0.0",
+    "gh-pages": "^3.1.0"
   }
 }
