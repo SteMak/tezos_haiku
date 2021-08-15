@@ -1,2 +1,0 @@
-const data={},rpc_addr="https://florencenet.smartpy.io/",network="florencenet",contract_addr="KT1HENdSq6gnGcsY73ib2sGmhbbPR5gyRW1n";let user_addr="",contract=!1;const statuses=["Proposed","Confirmed","Rejected","Violates copyright"],votes=["yes","no"],max_mint_amount=1e6,max_mint_length=128,max_max_report_url=512,max_max_report_author=64,min_voted_users=3,min_voted_on_report=2,min_voted_time=300,voted_positive_percent=.7;let dom_loaded=!1,data_loaded=!1,storage_loaded=!1;
-//# sourceMappingURL=account.14281da4.js.map
