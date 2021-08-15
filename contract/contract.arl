@@ -1,0 +1,447 @@
+archetype tezos_haiku
+with metadata `{
+  "name": "Tezos Haiku",
+  "description": "Contract for tezos_haiku project",
+  "interfaces": ["TZIP-012", "TZIP-016"],
+  "symbol": "HAIKU",
+  "decimals": 0,
+  "version": "0.1",
+  "license": "MIT",
+  "authors": [
+    "SteMak <chestedos@gmail.com>"
+  ],
+  "homepage": ""
+}`
+
+variable admin: address = @tz1ir2v9YNpWFFZNfZwdE6KeYPV6WtsYNtYU
+
+variable max_mint_length: nat = 128
+variable max_mint_amount: nat = 1000000
+
+variable max_max_report_url: nat = 512
+variable max_max_report_author: nat = 64
+
+variable min_voted_users: nat = 3 //100
+variable min_voted_on_report: nat = 2 //30
+variable min_voted_time: duration = 5m //2w
+variable voted_positive_percent: rational = 0.7
+
+enum token_state =
+| proposed
+| confirmed
+| rejected
+| abuse_copyright
+
+enum vote_state =
+| yes
+| no
+
+asset token {
+  token_id  : nat;
+  amount    : nat;
+  creator   : address;
+
+  state     : token_state;
+  cnfrm_by  : set<address>;
+  rejct_by  : set<address>;
+
+  crted_at  : date;
+  cnfrm_at  : date;
+
+  content   : string;
+
+  lang      : string;
+  back_color: nat;
+  text_color: nat;
+}
+
+asset ledger identified by owner_adrs t_id {
+  owner_adrs: address;
+  t_id      : nat;
+  count     : nat;
+  for_sale  : nat;
+  price     : tez;
+}
+
+asset report {
+  rep_id       : nat;
+  reporter_adrs: address;
+  rep_t_id     : nat;
+
+  orig_author  : string;
+  orig_link    : string;
+
+  yes_by       : set<address>;
+  no_by        : set<address>;
+}
+
+record transfer_destination {
+  to_dest          : address;
+  token_id_dest    : nat;
+  token_amount_dest: nat;
+} as ((to_, (token_id, amount)))
+
+record transfer_param {
+  from_dest: address;
+  txs_dest : list<transfer_destination>;
+} as ((from_, txs))
+
+record operator_param {
+  opp_owner   : address;
+  opp_operator: address;
+  opp_token_id: nat
+}
+
+record balance_of_request {
+  bo_owner : address;
+  btoken_id: nat;
+} as ((owner, token_id))
+
+record balance_of_response {
+  request : balance_of_request;
+  balance_: nat;
+} as ((request, balance))
+
+record buy_from {
+  seller: address;
+  buy_amount: nat;
+}
+
+entry token_mint_complex (ctnt: string, amt: nat, slble: nat, prc: tez, lg: string, bkg_clr: nat, txt_clr: nat) {
+  refuse transfer
+  require {
+    tmc_real_content otherwise "Please, provide content in length bounds!": 0 < length(ctnt) <= max_mint_length;
+    tmc_real_amount otherwise "Please, provide mint amount in bounds!": 0 < amt <= max_mint_amount;
+    tmc_real_lang otherwise "Please, language abbreviation of 2 symbols!": length(lg) = 2;
+    tmc_real_price otherwise "Price should be positive!": prc >= 0;
+    tmc_real_slble otherwise "Amount of selleble tokens should be between 0 and total amount!": 0 <= slble <= amt;
+    tmc_rbg_color otherwise "Color should be valid RGB!": 0 <= bkg_clr <= 16777215 and 0 <= txt_clr <= 16777215;
+  }
+  effect {
+    var tid = token.count();
+    token.add({ tid; amt; caller; proposed; []; []; now; now; ctnt; lg; bkg_clr; txt_clr });
+    ledger.add({ caller; tid; amt; slble; prc });
+  }
+}
+
+entry token_mint (ctnt: string) {
+  refuse transfer
+  require {
+    tm_real_content otherwise "Please, provide content in length bounds!": 0 < length(ctnt) <= max_mint_length;
+  }
+  effect {
+    var tid = token.count();
+    token.add({ tid; 100; caller; proposed; []; []; now; now; ctnt; "en"; 2636090; 16777215 });
+    ledger.add({ caller; tid; 100; 0; 0tz });
+  }
+}
+
+entry token_update_price (tid: nat, slble: nat, prc: tez) {
+  refuse transfer
+  require {
+    tup_token_exists otherwise "Selected token doesn't exist!": token.count() > tid;
+    tup_own_token otherwise "You don't own selected token!": ledger.contains((caller, tid));
+    tup_real_price otherwise "Price should be positive!": prc >= 0;
+    tup_real_slble otherwise "Amount of selleble tokens should be between 0 and your amount!": 0 <= slble <= ledger[(caller, tid)].count;
+  }
+  effect {
+    ledger.update((caller, tid), { for_sale = slble; price = prc });
+  }
+}
+
+entry %transfer (txs: list<transfer_param>) {
+  refuse transfer
+  effect {
+    var owner_tid_amount: map<(address * nat), nat> = [];
+
+    for tx in txs do
+      var %from = tx.from_dest;
+      var tdl = tx.txs_dest;
+      for td in tdl do
+        var new_amount = td.token_amount_dest;
+        if (contains(owner_tid_amount, (%from, td.token_id_dest))) then
+          new_amount += owner_tid_amount[(%from, td.token_id_dest)];
+        owner_tid_amount := remove(owner_tid_amount, (%from, td.token_id_dest));
+        owner_tid_amount := put(owner_tid_amount, (%from, td.token_id_dest), new_amount);
+      done;
+    done;
+
+    var token_count = token.count();
+    for (pair_owner, amt) in owner_tid_amount do
+      var old_owner = pair_owner[0];
+      var tid = pair_owner[1];
+
+      if not (token_count > tid) then fail("FA2_TOKEN_UNDEFINED");
+      if not (token[tid].state = confirmed) then fail("FA2_TOKEN_UNVERIFIED");
+      if not (ledger.contains((old_owner, tid)) and ledger[(old_owner, tid)].count >= amt) then fail("FA2_INSUFFICIENT_BALANCE");
+      if not (old_owner = caller) then fail("FA2_NOT_OWNER");
+    done;
+
+    for tx in txs do
+      var old_owner = tx.from_dest;
+      var tdl = tx.txs_dest;
+      for td in tdl do
+        var new_owner = td.to_dest;
+        var tid = td.token_id_dest;
+        var amt = td.token_amount_dest;
+        var cnt = ledger[(old_owner, tid)].count;
+        var slble = ledger[(old_owner, tid)].for_sale;
+        var diff_cnt = abs(cnt - amt);
+
+        if (diff_cnt = 0) then (ledger.remove((old_owner, tid)))
+        else if (diff_cnt >= slble) then (ledger.update((old_owner, tid), { count = diff_cnt }))
+        else (ledger.update((old_owner, tid), { count = diff_cnt; for_sale = diff_cnt }));
+
+        if (not ledger.contains((new_owner, tid))) then ledger.add({ new_owner; tid; 0; 0; 0tz });
+        ledger.update((new_owner, tid), { count += amt });
+      done;
+    done;
+  }
+}
+
+getter balance_of (brs: list<balance_of_request>): list<balance_of_response> {
+  var token_count = token.count();
+  for br in brs do
+    if not (token_count > br.btoken_id) then fail("FA2_TOKEN_UNDEFINED");
+  done;
+  return map(brs, br -> {
+    request = br;
+    balance_ = (
+      if ledger.contains((br.bo_owner, br.btoken_id)) then (
+        ledger[(br.bo_owner, br.btoken_id)].count;
+      ) else 0;
+    )
+  })
+}
+
+entry update_operators (upl: list<or<operator_param, operator_param>>) {
+  require {
+    uo otherwise "FA2_OPERATORS_UNSUPPORTED": false;
+  }
+}
+
+entry transfer_one (tid: nat, amt: nat, old_owner: address, new_owner: address) {
+  accept transfer
+  called by old_owner or new_owner
+  require {
+    t_token_exists otherwise "Selected token doesn't exist!": token.count() > tid;
+    t_valid_token_state otherwise "Selected token wasn't confirmed yet!": token[tid].state = confirmed;
+    t_owner_owns_token otherwise "Selected user doesn't own this tokens!": ledger.contains((old_owner, tid));
+    t_owner_owns_enough_to_give otherwise "Selected owner doesn't own so many tokens!": ledger[(old_owner, tid)].count >= amt;
+    t_owner_owns_enough_to_take otherwise "Your demand exceeds supply!": ledger[(old_owner, tid)].for_sale >= amt or caller = old_owner;
+    t_sufficient_balance otherwise "You transferred not enough money to buy selected amount!": transferred >= ledger[(old_owner, tid)].price * amt or caller = old_owner;
+  }
+  effect {
+    var token_price = ledger[(old_owner, tid)].price;
+    var slble = ledger[(old_owner, tid)].for_sale;
+    var cnt = ledger[(old_owner, tid)].count;
+
+    if (caller = new_owner) then (
+      var purchase_cost = token_price * amt;
+      if (purchase_cost > 0) then transfer purchase_cost to old_owner;
+      if ((transferred - purchase_cost) > 0) then transfer (transferred - purchase_cost) to new_owner;
+
+      if (cnt - amt = 0) then (ledger.remove((old_owner, tid)))
+      else (ledger.update((old_owner, tid), { count = abs(cnt - amt); for_sale = abs(slble - amt)}));
+    ) else if (caller = old_owner) then (
+      if (transferred > 0) then transfer transferred to old_owner;
+
+      if (cnt - amt = 0) then (ledger.remove((old_owner, tid)))
+      else if (cnt - amt >= slble) then (ledger.update((old_owner, tid), { count = abs(cnt - amt) }))
+      else (ledger.update((old_owner, tid), { count = abs(cnt - amt); for_sale = abs(cnt - amt) }));
+    );
+
+    if (not ledger.contains((new_owner, tid))) then ledger.add({ new_owner; tid; 0; 0; 0tz });
+    ledger.update((new_owner, tid), { count += amt });
+  }
+}
+
+entry token_buy (tid: nat, sellers: list<buy_from>) {
+  accept transfer
+  require {
+    tb_token_exists otherwise "Selected token doesn't exist!": token.count() > tid;
+    tb_valid_token_state otherwise "Selected token wasn't confirmed yet!": token[tid].state = confirmed;
+    tb_check_sellers otherwise "Bad sellers provided (possible outdated data)!": check_sellers(tid, sellers);
+    tb_check_transfer otherwise "Not enough money transferred (possible outdated data)!": transferred >= need_money(tid, sellers);
+  }
+  effect {
+    var tr  = transferred;
+    if (not ledger.contains((caller, tid))) then ledger.add({ caller; tid; 0; 0; 0tz });
+    for slr in sellers do
+      if (slr.buy_amount > 0) then (
+        var token_price = ledger[(slr.seller, tid)].price;
+        var slble = ledger[(slr.seller, tid)].for_sale;
+        var cnt = ledger[(slr.seller, tid)].count;
+
+        var purchase_cost = token_price * slr.buy_amount;
+        if (purchase_cost > 0) then transfer purchase_cost to slr.seller;
+        tr -= purchase_cost;
+
+        if (cnt - slr.buy_amount = 0) then (ledger.remove((slr.seller, tid)))
+        else (ledger.update((slr.seller, tid), { count = abs(cnt - slr.buy_amount); for_sale = abs(slble - slr.buy_amount)}));
+        ledger.update((caller, tid), { count += slr.buy_amount });
+      );
+    done;
+
+    if (tr > 0) then transfer tr to caller;
+  }
+}
+
+function check_sellers (tid: nat, sellers : list<buy_from>) : bool {
+  var res = true;
+  for slr in sellers do
+    if not ledger.contains((slr.seller, tid)) then (res := false);
+    if not (ledger[(slr.seller, tid)].for_sale >= slr.buy_amount) then (res := false);
+  done;
+  return res
+}
+function need_money (tid: nat, sellers : list<buy_from>) : nat {
+  var need = 0;
+  for slr in sellers do
+    need += ledger[(slr.seller, tid)].price * slr.buy_amount;
+  done;
+  return need
+}
+
+entry token_vote_for_state (tid: nat, s: vote_state) {
+  refuse transfer
+  require {
+    tvfs_token_exists otherwise "Selected token doesn't exist!": token.count() > tid;
+    tvfs_valid_token_state otherwise "Voting for this token has alrealdy finished!": token[tid].state = proposed;
+  }
+  effect {
+    if (s = yes) then (
+      token[tid].rejct_by := remove(token[tid].rejct_by, caller);
+      token[tid].cnfrm_by := add(token[tid].cnfrm_by, caller)
+    ) else if (s = no) then (
+      token[tid].cnfrm_by := remove(token[tid].cnfrm_by, caller);
+      token[tid].rejct_by := add(token[tid].rejct_by, caller)
+    );
+  }
+}
+
+entry token_report (tid: nat, rep_author: string, rep_link: string) {
+  refuse transfer
+  require {
+    tr_token_exists otherwise "Selected token doesn't exist!": token.count() > tid;
+    tr_valid_token_state otherwise "Voting for this token has alrealdy finished!": token[tid].state = proposed;
+    tr_valid_token_time otherwise "Reporting time has alrealdy finished!": token[tid].crted_at + min_voted_time <= now;
+    tr_real_link otherwise "Please, provide link in length bounds!": 0 < length(rep_link) <= max_max_report_url;
+    tr_real_author otherwise "Please, provide author in length bounds!": 0 < length(rep_author) <= max_max_report_author;
+    tr_spam otherwise "You have already reported about this haiku!": isnt_already_reported(caller, tid);
+  }
+  effect {
+    report.add({ report.count(); caller; tid; rep_author; rep_link; []; [] })
+  }
+}
+
+function isnt_already_reported (c: address, tid: nat) : bool {
+  var res = true;
+  for k in report do
+    if (report[k].rep_t_id = tid and report[k].reporter_adrs = caller) then res := false;
+  done;
+  return res
+}
+
+entry token_vote_for_report (rep: nat, s: vote_state) {
+  refuse transfer
+  require {
+    tvfr_token_exists otherwise "Selected report doesn't exist!": report.contains(rep);
+    tvfr_valid_token_state otherwise "Voting for this token has alrealdy finished!": token[report[rep].rep_t_id].state = proposed;
+  }
+  effect {
+    if (s = yes) then (
+      report[rep].no_by := remove(report[rep].no_by, caller);
+      report[rep].yes_by := add(report[rep].yes_by, caller)
+    ) else if (s = no) then (
+      report[rep].yes_by := remove(report[rep].yes_by, caller);
+      report[rep].no_by := add(report[rep].no_by, caller)
+    );
+  }
+}
+
+entry token_update_state (tid: nat) {
+  refuse transfer
+  require {
+    tus_token_exists otherwise "Selected token doesn't exist!": token.count() > tid;
+    tus_valid_token_state otherwise "Voting for this token has alrealdy finished!": token[tid].state = proposed;
+    tus_valid_time otherwise "Not enough time has passed!": token[tid].crted_at + min_voted_time <= now;
+    tus_valid_users otherwise "Not enough users voted!": length(token[tid].cnfrm_by) + length(token[tid].rejct_by) >= min_voted_users;
+  }
+  effect {
+    var user_vote = (length(token[tid].cnfrm_by) / (length(token[tid].cnfrm_by) + length(token[tid].rejct_by))) >= voted_positive_percent;
+    var bad_report_vote = false;
+    var good_report_vote = true;
+    for r in report do
+      if (report[r].rep_t_id = tid) then (
+        if (length(report[r].yes_by) + length(report[r].no_by) >= min_voted_on_report) then (
+          if (length(report[r].yes_by) / (length(report[r].yes_by) + length(report[r].no_by)) >= voted_positive_percent) then (
+            bad_report_vote := true;
+          );
+        ) else (
+          good_report_vote := false;
+        );
+      );
+    done;
+
+    if bad_report_vote then (
+      token[tid].state := abuse_copyright;
+      ledger.remove((token[tid].creator, tid));
+
+      token[tid].cnfrm_by := [];
+      token[tid].rejct_by := [];
+      report.removeif(rep_t_id = tid);
+    ) else if not user_vote then (
+      token[tid].state := rejected;
+      ledger.remove((token[tid].creator, tid));
+
+      token[tid].cnfrm_by := [];
+      token[tid].rejct_by := [];
+      report.removeif(rep_t_id = tid);
+    ) else if not bad_report_vote and user_vote and good_report_vote then (
+      token[tid].state := confirmed;
+      token[tid].cnfrm_at := now;
+
+      token[tid].cnfrm_by := [];
+      token[tid].rejct_by := [];
+      report.removeif(rep_t_id = tid);
+    );
+  }
+}
+
+entry change_max_mint (mamt: nat, mlen: nat) {
+  refuse transfer
+  called by admin
+  effect {
+    max_mint_amount := mamt;
+    max_mint_length := mlen;
+  }
+}
+
+entry change_max_report (rurl: nat, raut: nat) {
+  refuse transfer
+  called by admin
+  effect {
+    max_max_report_url := rurl;
+    max_max_report_author := raut;
+  }
+}
+
+entry change_min_voted (users: nat, on_report: nat, time: duration, percent: rational) {
+  refuse transfer
+  called by admin
+  effect {
+    min_voted_users := users;
+    min_voted_on_report := on_report;
+    min_voted_time := time;
+    voted_positive_percent := percent
+  }
+}
+
+entry change_admin (new_adm: address) {
+  refuse transfer
+  called by admin
+  effect {
+    admin := new_adm;
+  }
+}

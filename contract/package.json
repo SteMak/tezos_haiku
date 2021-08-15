@@ -1,0 +1,11 @@
+{
+  "name": "tezos_haiku_contract",
+  "version": "1.0.0",
+  "description": "Contract for tezos_haiku project",
+  "main": "contract.arl",
+  "author": "SteMak",
+  "license": "MIT",
+  "devDependencies": {
+    "@completium/completium-cli": "^0.1.20"
+  }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Site for tezos contract, which allows to post, sell and claim haikus.">
+  <meta name="author" content="SteMak">
+
+  <title>Tezos Haiku</title>
+  <link href="/src/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/src/css/style.css" rel="stylesheet" type="text/css">
+
+  <link rel="apple-touch-icon" href="/src/img/logo.svg" sizes="180x180">
+  <link rel="icon" href="/src/img/logo.svg" sizes="32x32" type="image/jpg">
+  <link rel="icon" href="/src/img/logo.svg" sizes="16x16" type="image/jpg">
+  <link rel="icon" href="/src/img/logo.svg">
+  <meta name="theme-color" content="#212529">
+</head>
+
+<body>
+  <header>
+    <div class="navbar navbar-dark header_buttons">
+      <div class="container buttons_area">
+        <a href="/src/html/index.html" class="navbar-brand">
+          <strong>Gallery</strong>
+        </a>
+        <a href="/src/html/verification.html" class="navbar-brand">
+          <strong>Verification</strong>
+        </a>
+        <a href="/src/html/account.html" class="navbar-brand ">
+          <strong>Account</strong>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="description_container">
+      <h1 class="fw-light">Verification</h1>
+      <p class="lead">Here you can participate in confirming or rejecting of new haikus. As soon as haiku is published
+        it goes here in order to get community acceptance. After 2 weeks and 100 users voted, it becomes confirmed or
+        rejected. Also please report if new haiku abuses copyright, community will vote for it too.</p>
+      <p id="buttons_preview">
+        <a href="/src/html/index.html" class="btn btn_primary right_down_space">Back to gallery</a>
+        <a href="/src/html/account.html" class="btn btn_secondary right_down_space">Proceed to account</a>
+      </p>
+    </section>
+
+    <div class="container">
+      <div id="tokens"></div>
+      <div id="report_popup"></div>
+    </div>
+  </main>
+
+  <footer class="text-muted py-5">
+    <div class="container">
+      <p class="float-end mb-1">
+        <a href="/src/html/verification.html">Back to top</a>
+      </p>
+      <p class="mb-1">Project Tezos Haiku written by © <a href="https://github.com/SteMak" target="_blank">SteMak</a>
+      </p>
+      <p class="mb-0">Have any questions? Write me a letter <a href="mailto:chestedos@gmail.com"
+          target="_blank">chestedos@gmail.com</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    var connect_wallet, disconnect_wallet, report_open, report_close, levenshtein
+  </script>
+  <script src="/src/js/united.js"></script>
+  <script type="module" src="/src/js/verification.js"></script>
+</body>
+
+</html>

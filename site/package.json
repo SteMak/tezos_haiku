@@ -1,0 +1,19 @@
+{
+  "name": "tezos_haiku_site",
+  "version": "1.0.0",
+  "description": "Site for tezos_haiku project",
+  "author": "SteMak",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel src/html/index.html"
+  },
+  "devDependencies": {
+    "@parcel/transformer-image": "2.0.0-rc.0",
+    "parcel": "^2.0.0-rc.0"
+  },
+  "dependencies": {
+    "@airgap/beacon-sdk": "^2.3.1",
+    "@taquito/beacon-wallet": "^10.0.0",
+    "@taquito/taquito": "^10.0.0"
+  }
+}
