@@ -19,6 +19,7 @@ Tezos.contract.at(contract_addr)
 
 check_wallet = async () => {
   const activeAccount = await Wallet.client.getActiveAccount();
+  document.getElementById('wallet').style.display = ''
   if (!activeAccount) {
     document.getElementById('main_container').innerHTML += '<h2 class="fw-light center">Please, connect your wallet to see your account</h2>'
   } else {
@@ -84,6 +85,7 @@ disconnect_wallet = async () => await Wallet.clearActiveAccount()
 const assign_data = (storage) => {
   data.tokens = []
   data.owners = []
+  data.reports = []
 
   for (const [key, value] of storage.token.valueMap) {
     value.id = Number(key.slice(1, -1))
@@ -116,6 +118,11 @@ const assign_data = (storage) => {
     value.price = Number(value.price)
     data.owners.push(value)
   }
+  for (const [key, value] of storage.report.valueMap) {
+    value.id = Number(key.slice(1, -1))
+    value.rep_t_id = Number(value.rep_t_id)
+    data.reports.push(value)
+  }
 }
 
 const main_start = () => {
@@ -123,22 +130,46 @@ const main_start = () => {
 
   console.log(data.tokens)
   console.log(data.owners)
+  console.log(data.reports)
 
   const created = data.tokens.filter(c => c.creator == user_addr).sort((a, b) => (a.state - b.state) || (b.cnfrm_at - a.cnfrm_at))
   for (const t of created) {
+    const rep = data.reports.filter(c => c.rep_t_id == t.id)
     const min_price = data.owners.filter(c => c.token_id == t.id).reduce((a, c) => a > c.price && c.for_sale > 0 ? c.price : a, Infinity)
-    document.getElementById("created_tokens").innerHTML += `<div class="card token" onclick="info_open(${t.id})">
-      ${t.image}
-      <div class="card-body" style="${t.state == 0 ? 'background-color: azure;' : t.state > 1 ? 'background-color: #ffdfc6;' : ''}">
-        <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
-        <b class="card-text">${min_price !== Infinity ? `Price starts from <a style="font-family:monospace;">${min_price / 1000000}tz</a>` : `Not for sale :(`}</b>
-        <p></p>
-        <div class="d-flex justify-content-between align-items-center">
-          <button type="button" id="buy_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">More</button>
-          <small class="text-muted">${t.cnfrm_at.toGMTString().split(', ')[1].slice(0, -7)}</small>
-        </div>
-      </div>
-    </div>`
+    if (
+      t.cnfrm_by.length + t.rejct_by.length >= min_voted_users
+      && Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date())
+      && (
+        rep.reduce((a, c) => a || (c.yes_by.length + c.no_by.length >= min_voted_on_report && c.yes_by.length / (c.yes_by.length + c.no_by.length) >= voted_positive_percent), rep.length == 0)
+        || rep.reduce((a, c) => a && (c.yes_by.length + c.no_by.length >= min_voted_on_report), true)
+      )
+    ) {
+      document.getElementById("created_tokens").innerHTML += `
+        <div class="card token">
+          ${t.image}
+          <div class="card-body state_type_${statuses_d[t.state]}">
+            <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>
+            </div>
+            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
+          </div>
+        </div>`
+    } else {
+      document.getElementById("created_tokens").innerHTML += `
+        <div class="card token" onclick="info_open(${t.id})">
+          ${t.image}
+          <div class="card-body state_type_${statuses_d[t.state]}">
+            <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+            <b class="card-text">${min_price !== Infinity ? `Price starts from <a style="font-family:monospace;">${min_price / 1000000}tz</a>` : `Not for sale :(`}</b>
+            <p></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <button type="button" id="buy_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">More</button>
+              <small class="text-muted">${t.cnfrm_at.toGMTString().split(', ')[1].slice(0, -7)}</small>
+            </div>
+          </div>
+        </div>`
+    }
   }
   if (created.length == 0) {
     document.getElementById("nothing_crt").innerHTML = `<h3 class="fw-light center">Nothing here :(</h3>`
@@ -297,6 +328,23 @@ const token_mint_complex = async (id) => {
     console.log(`The contract call failed and the following error was returned:`, error);
   }
 }
+const token_update_state = async (id, state) => {
+  document.getElementById(`update_button-${id}`).disabled = true
+  document.getElementById(`note_result-${id}`).innerHTML = 'Please, confirm transaction in your wallet'
+  contract = contract ? contract : await Tezos.wallet.at(contract_addr);
+  try {
+    const result = await contract.methods.token_update_state(Number(id)).send();
+    document.getElementById(`note_result-${id}`).innerHTML = 'Your request is in work. Wait some and update page to view changes.'
+  } catch (error) {
+    if (error.title == 'Aborted') {
+      document.getElementById(`note_result-${id}`).innerHTML = 'Please, try again and confirm transaction in your wallet'
+      document.getElementById(`update_button-${id}`).disabled = false
+    } else {
+      document.getElementById(`note_result-${id}`).innerHTML = 'Something went wrong, please update page and try again'
+    }
+    console.log(`The contract call failed and the following error was returned:`, error);
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => { dom_loaded = true; main_start() })
 document.addEventListener('click', e => {
@@ -310,6 +358,10 @@ document.addEventListener('click', e => {
   const id = e.target.id.split('-')
   if (id[0] == 'sell_cfrm') {
     token_update_price(id[1])
+  }
+  if (id[0] == 'update_button') {
+    e.stopPropagation()
+    token_update_state(id[1])
   }
 })
 document.addEventListener('input', e => {

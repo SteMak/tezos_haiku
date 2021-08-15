@@ -117,53 +117,70 @@ const main_start = () => {
     }
     const eq_counter = eq_words(nearest, t.content)
 
-    document.getElementById("tokens").innerHTML += `<div class="card token">
-      ${t.image}
-      <div class="card-body">
-        <p class="card-text" style="margin-bottom: 0;">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
-      </div>
-      ${t.cnfrm_by.length + t.rejct_by.length >= min_voted_users &&
-        Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) &&
-        (rep.reduce((a, c) => a || (c.yes_by.length + c.no_by.length >= min_voted_on_report && c.yes_by.length / (c.yes_by.length + c.no_by.length) >= voted_positive_percent), rep.length == 0)
-          || rep.reduce((a, c) => a && (c.yes_by.length + c.no_by.length >= min_voted_on_report), true)) ? `
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
-            <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>
+    if (
+      t.cnfrm_by.length + t.rejct_by.length >= min_voted_users
+      && Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date())
+      && (
+        rep.reduce((a, c) => a || (c.yes_by.length + c.no_by.length >= min_voted_on_report && c.yes_by.length / (c.yes_by.length + c.no_by.length) >= voted_positive_percent), rep.length == 0)
+        || rep.reduce((a, c) => a && (c.yes_by.length + c.no_by.length >= min_voted_on_report), true)
+      )
+    ) {
+      document.getElementById("tokens").innerHTML += `
+        <div class="card token">
+          ${t.image}
+          <div class="card-body">
+            <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>
+            </div>
+            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
           </div>
-          <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
-        </div>` : `
-        ${nearest && eq_counter >= 3 ? `<div class="card-body plagiarism"><p style="margin-bottom:5px;">Possible plagiarism of:</p><p style="margin-bottom:0;">${nearest.split('\n').join('<br>')}</p></div>` : ''}
-      <div class="card-body">
-        <div class="voting">
-          <button type="button" class="btn btn_voting_good" id="good_vote-${t.id}" ${t.cnfrm_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
-          <div class="progress" style="width: 100%;margin: 5px;">
-            <div class="progress-bar" role="progressbar" id="voting_bar-${t.id}" style="width: ${t.cnfrm_by.length + t.rejct_by.length ? t.cnfrm_by.length / (t.cnfrm_by.length + t.rejct_by.length) * 100 : 50}%"></div>
+        </div>`
+    } else {
+      document.getElementById("tokens").innerHTML += `
+        <div class="card token">
+          ${t.image}
+          <div class="card-body">
+            <p class="card-text" style="margin-bottom: 0;">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
           </div>
-          <button type="button" class="btn btn_voting_bad" id="bad_vote-${t.id}" ${t.rejct_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
-        </div>
-        <p class="buy_note" id="note_vote-${t.id}">Total number of votes: ${t.cnfrm_by.length + t.rejct_by.length}. You have${t.cnfrm_by.includes(user_addr) ? ' voted for green' : t.rejct_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>
-        <p></p>
-        <div class="d-flex justify-content-between align-items-center">
-          ${Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) ? '<p></p>' : `<button type="button" id="report_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">Report</button>`}
-          <small class="text-muted">${t.crted_at.toGMTString().split(', ')[1].slice(0, -7)}</small>
-        </div>
-        <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
-      </div>
-      ${rep.reduce((a, c) => a + `<div class="card-body viol_cprt">
-        <p class="card-text">Possible violation of copyright!</p>
-        <p class="card-text">This is known haiku of <a style="font-family:monospace; font-size: initial;">${c.orig_author}</a></p>
-        <p class="card-text">Prove link: <a href="${c.orig_link}">proves here</a></p>
-        <div class="voting">
-          <button type="button" class="btn btn_voting_good" id="rep_good_vote-${c.id}" ${c.yes_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
-          <div class="progress" style="width: 100%;margin: 5px;">
-            <div class="progress-bar" role="progressbar" id="rep_voting_bar-${c.id}" style="width: ${c.yes_by.length + c.no_by.length ? c.yes_by.length / (c.yes_by.length + c.no_by.length) * 100 : 50}%"></div>
+          ${nearest && eq_counter >= 3 ? `
+            <div class="card-body plagiarism">
+              <p style="margin-bottom:5px;">Possible plagiarism of:</p><p style="margin-bottom:0;">${nearest.split('\n').join('<br>')}</p>
+            </div>` : ''
+        }
+          <div class="card-body">
+            <div class="voting">
+              <button type="button" class="btn btn_voting_good" id="good_vote-${t.id}" ${t.cnfrm_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
+              <div class="progress" style="width: 100%;margin: 5px;">
+                <div class="progress-bar" role="progressbar" id="voting_bar-${t.id}" style="width: ${t.cnfrm_by.length + t.rejct_by.length ? t.cnfrm_by.length / (t.cnfrm_by.length + t.rejct_by.length) * 100 : 50}%"></div>
+              </div>
+              <button type="button" class="btn btn_voting_bad" id="bad_vote-${t.id}" ${t.rejct_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
+            </div>
+            <p class="buy_note" id="note_vote-${t.id}">Total number of votes: ${t.cnfrm_by.length + t.rejct_by.length}. You have${t.cnfrm_by.includes(user_addr) ? ' voted for green' : t.rejct_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>
+            <p></p>
+            <div class="d-flex justify-content-between align-items-center">
+              ${Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) ? '<p></p>' : `<button type="button" id="report_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">Report</button>`}
+              <small class="text-muted">${t.crted_at.toGMTString().split(', ')[1].slice(0, -7)}</small>
+            </div>
+            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
           </div>
-          <button type="button" class="btn btn_voting_bad" id="rep_bad_vote-${c.id}" ${c.no_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
-        </div>
-        <p class="buy_note" id="rep_note_vote-${c.id}">Total number of votes: ${c.yes_by.length + c.no_by.length}. You have${c.yes_by.includes(user_addr) ? ' voted for green' : c.no_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>
-        <p class="buy_note" id="rep_note_result-${c.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
-      </div>`, '')}`}
-    </div>`
+          ${rep.reduce((a, c) => a + `
+            <div class="card-body viol_cprt">
+              <p class="card-text">Possible violation of copyright!</p>
+              <p class="card-text">This is known haiku of <a style="font-family:monospace; font-size: initial;">${c.orig_author}</a></p>
+              <p class="card-text">Prove link: <a href="${c.orig_link}" target="_blank">proves here</a></p>
+              <div class="voting">
+                <button type="button" class="btn btn_voting_good" id="rep_good_vote-${c.id}" ${c.yes_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
+                <div class="progress" style="width: 100%;margin: 5px;">
+                  <div class="progress-bar" role="progressbar" id="rep_voting_bar-${c.id}" style="width: ${c.yes_by.length + c.no_by.length ? c.yes_by.length / (c.yes_by.length + c.no_by.length) * 100 : 50}%"></div>
+                </div>
+                <button type="button" class="btn btn_voting_bad" id="rep_bad_vote-${c.id}" ${c.no_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
+              </div>
+              <p class="buy_note" id="rep_note_vote-${c.id}">Total number of votes: ${c.yes_by.length + c.no_by.length}. You have${c.yes_by.includes(user_addr) ? ' voted for green' : c.no_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>
+              <p class="buy_note" id="rep_note_result-${c.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
+            </div>`, '')}
+        </div>`
+    }
   }
 }
 
@@ -232,22 +249,26 @@ const token_vote_for_state = async (id, state) => {
   document.getElementById(`voting_bar-${id}`).style.width = `${t.cnfrm_by.length / (t.cnfrm_by.length + t.rejct_by.length) * 100}%`
 }
 const token_vote_for_report = async (id, state) => {
-  let t = data.reports[id]
+  let t = data.reports.filter(c => c.id == id)[0]
+  if (!t) {
+    document.getElementById(`rep_note_result-${id}`).innerHTML = 'Report for which we vote is undefined, please, try again later.'
+    return
+  }
 
   document.getElementById(`rep_bad_vote-${id}`).disabled = true
   document.getElementById(`rep_good_vote-${id}`).disabled = true
-  document.getElementById(`rep_note_result-${t.id}`).innerHTML = 'Please, confirm transaction in your wallet'
+  document.getElementById(`rep_note_result-${id}`).innerHTML = 'Please, confirm transaction in your wallet'
   contract = contract ? contract : await Tezos.wallet.at(contract_addr);
   try {
     const result = await contract.methods.token_vote_for_report(Number(id), votes.indexOf(state)).send();
-    document.getElementById(`rep_note_result-${t.id}`).innerHTML = 'Your request is in work. Wait some and update page to view changes.'
+    document.getElementById(`rep_note_result-${id}`).innerHTML = 'Your request is in work. Wait some and update page to view changes.'
   } catch (error) {
     if (error.title == 'Aborted') {
-      document.getElementById(`rep_note_result-${t.id}`).innerHTML = 'Please, try again and confirm transaction in your wallet'
+      document.getElementById(`rep_note_result-${id}`).innerHTML = 'Please, try again and confirm transaction in your wallet'
       document.getElementById(`rep_bad_vote-${id}`).disabled = t.no_by.includes(user_addr)
       document.getElementById(`rep_good_vote-${id}`).disabled = t.yes_by.includes(user_addr)
     } else {
-      document.getElementById(`rep_note_result-${t.id}`).innerHTML = 'Something went wrong, please update page and try again'
+      document.getElementById(`rep_note_result-${id}`).innerHTML = 'Something went wrong, please update page and try again'
     }
     console.log(`The contract call failed and the following error was returned:`, error);
     return
@@ -271,7 +292,7 @@ const token_report = async (id, state) => {
   document.getElementById('note_result').innerHTML = 'Please, confirm transaction in your wallet'
   contract = contract ? contract : await Tezos.wallet.at(contract_addr);
   try {
-    const result = await contract.methods.token_report(Number(id), document.getElementById('real_author').value, document.getElementById('real_link').value).send();
+    const result = await contract.methods.token_report(Number(id), document.getElementById('real_author').value || " ", document.getElementById('real_link').value || " ").send();
     document.getElementById(`note_result`).innerHTML = 'Your request is in work. Wait some and update page to view changes.'
   } catch (error) {
     if (error.title == 'Aborted') {

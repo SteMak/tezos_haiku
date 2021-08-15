@@ -2,11 +2,12 @@ const data = {}
 const rpc_addr = 'https://florencenet.smartpy.io/'//'https://api.tez.ie/rpc/florencenet'
 const network = "florencenet"
 
-const contract_addr = 'KT1HENdSq6gnGcsY73ib2sGmhbbPR5gyRW1n'
+const contract_addr = 'KT1LA2aMYXi4DVLQMtxQZZEbvW9eRnBUwxnk'
 let user_addr = ''
 
 let contract = false
 const statuses = ['Proposed', 'Confirmed', 'Rejected', 'Violates copyright']
+const statuses_d = ['proposed', 'confirmed', 'rejected', 'copyright']
 const votes = ['yes', 'no']
 
 const max_mint_amount = 1000000

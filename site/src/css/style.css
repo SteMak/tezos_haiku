@@ -263,3 +263,20 @@ footer {
   border-bottom: 1px solid rgba(0,0,0,.125);
   padding: 16px 0 19px 27px;
 }
+
+.space_between_lists {
+  margin-bottom: 40px;
+}
+
+.state_type_proposed {
+  background-color: #ddffff;
+}
+.state_type_confirmed {
+  background-color: white;
+}
+.state_type_rejected {
+  background-color: #ffdfc6;
+}
+.state_type_copyright {
+  background-color: #ffc6c6;
+}
