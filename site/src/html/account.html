@@ -45,6 +45,9 @@
       </p>
       <p>
         <a id="new_haiku_button" class="btn btn_primary right_down_space">Publish new haiku</a>
+        <a id="copy_link" class="btn btn_primary right_down_space" onclick="copy_link()" style="display: none;">Copy
+          your public link</a>
+        <input id="link_buff" style="position: fixed;top: 210%;"></input>
         <a id="wallet" class="btn btn_primary right_down_space" onclick="connect_wallet()"
           style="display: none;">Connect wallet</a>
       </p>
@@ -69,7 +72,7 @@
 
   <script src="/src/js/united.js"></script>
   <script>
-    var connect_wallet, disconnect_wallet, info_open, sell_open, token_close
+    var connect_wallet, disconnect_wallet, info_open, sell_open, token_close, copy_link
     alien_link = new URL(document.getElementById('alien_link').href).pathname;
     account_link = new URL(document.getElementById('account_link').href).pathname;
   </script>

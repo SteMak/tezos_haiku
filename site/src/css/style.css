@@ -1,6 +1,8 @@
 body {
   background-color: #c6e2ff;
-  
+}
+
+svg {  
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -277,6 +279,11 @@ footer {
   border-top: 1px solid rgba(0,0,0,.125);
   border-bottom: 1px solid rgba(0,0,0,.125);
   padding: 16px 0 19px 27px;
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .space_between_lists {

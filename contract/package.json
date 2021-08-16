@@ -4,6 +4,9 @@
   "description": "Contract for tezos_haiku project",
   "author": "SteMak",
   "license": "MIT",
+  "scripts": {
+    "deploy": "npx completium-cli deploy contract.arl"
+  },
   "homepage": "https://better-call.dev/florencenet/KT1LA2aMYXi4DVLQMtxQZZEbvW9eRnBUwxnk/operations",
   "repository": {
     "type": "git",

@@ -24,6 +24,7 @@ check_wallet = async () => {
     document.getElementById('main_container').innerHTML += '<h2 class="fw-light center">Please, connect your wallet to see your account</h2>'
   } else {
     user_addr = activeAccount.address;
+    document.getElementById('copy_link').style.display = ''
     document.getElementById('wallet').onclick = () => { disconnect_wallet(); document.location.reload() }
     document.getElementById('wallet').innerHTML = 'Disconnect or change wallet'
     document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haikus</h2>
@@ -59,6 +60,7 @@ connect_wallet = async () => {
     user_addr = activeAccount.address;
   }
   if (storage_loaded) {
+    document.getElementById('copy_link').style.display = ''
     document.getElementById('wallet').onclick = () => { disconnect_wallet(); document.location.reload() }
     document.getElementById('wallet').innerHTML = 'Disconnect or change wallet'
     document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haikus</h2>
@@ -81,6 +83,14 @@ connect_wallet = async () => {
 }
 
 disconnect_wallet = async () => await Wallet.clearActiveAccount()
+
+copy_link = () => {
+  document.getElementById('link_buff').value = `${document.getElementById('alien_link').href}?address=${user_addr}`
+  let cp = document.getElementById('link_buff')
+  cp.select();
+  cp.setSelectionRange(0, 100);
+  document.execCommand('copy');
+}
 
 const assign_data = (storage) => {
   data.tokens = []
