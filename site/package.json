@@ -6,7 +6,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel src/html/index.html",
-    "build": "parcel build src/html/index.html --public-url /tezos_haiku/ --no-scope-hoist" ,
+    "predev": "shx rm -rf dist/*",
+    "build": "parcel build src/html/index.html --public-url /tezos_haiku/ --no-scope-hoist",
+    "prebuild": "shx rm -rf dist/*",
     "deploy": "gh-pages -d dist",
     "predeploy": "yarn build"
   },
@@ -17,7 +19,8 @@
   "homepage": "https://SteMak.github.io/tezos_haiku",
   "devDependencies": {
     "@parcel/transformer-image": "2.0.0-rc.0",
-    "parcel": "^2.0.0-rc.0"
+    "parcel": "^2.0.0-rc.0",
+    "shx": "^0.3.3"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.1",
