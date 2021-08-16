@@ -12,6 +12,7 @@ Tezos.contract.at(contract_addr)
       .then(storage => {
         assign_data(storage)
         check_wallet()
+        document.getElementById('sort_container').style.display = ''
         data_loaded = true
         main_start()
       })
@@ -50,6 +51,15 @@ const assign_data = (storage) => {
   data.tokens = []
   data.owners = []
 
+  for (const [s_key, value] of storage.ledger.valueMap) {
+    const key = JSON.parse(s_key)
+    value.token_id = Number(key[1])
+    value.owner = key[0]
+    value.count = Number(value.count)
+    value.for_sale = Number(value.for_sale)
+    value.price = Number(value.price)
+    data.owners.push(value)
+  }
   for (const [key, value] of storage.token.valueMap) {
     value.id = Number(key.slice(1, -1))
     value.amount = Number(value.amount)
@@ -65,37 +75,31 @@ const assign_data = (storage) => {
     c_b.g = (value.back_color - c_b.b) / 256 % 256
     c_b.r = ((value.back_color - c_b.b) / 256 - c_b.g) / 256 % 256
     value.image = `<svg class="" width="338px" height="225px" role="img" focusable="false">
-    <rect width="100%" height="100%" fill="rgb(${c_b.r},${c_b.g},${c_b.b})" rx="0.25rem" ry="0.25rem"></rect>
-    <text y="20%" fill="white" font-size="1.2em">
-      ${value.content.split('\n').reduce((a, c) => a + `<tspan x="10%" dy="1.6em" fill="rgb(${c_t.r},${c_t.g},${c_t.b})">${c}</tspan>`, "")}
-    </text>
-  </svg>`
+      <rect width="100%" height="100%" fill="rgb(${c_b.r},${c_b.g},${c_b.b})" rx="0.25rem" ry="0.25rem"></rect>
+      <text y="20%" fill="white" font-size="1.2em">
+        ${value.content.split('\n').reduce((a, c) => a + `<tspan x="10%" dy="1.6em" fill="rgb(${c_t.r},${c_t.g},${c_t.b})">${c}</tspan>`, "")}
+      </text>
+    </svg>`
+
+    value.min_price = data.owners.filter(c => c.token_id == value.id).reduce((a, c) => a > c.price && c.for_sale > 0 ? c.price : a, Infinity)
+    value.owners_amount = data.owners.filter(c => c.token_id == value.id).length
     data.tokens.push(value)
-  }
-  for (const [s_key, value] of storage.ledger.valueMap) {
-    const key = JSON.parse(s_key)
-    value.token_id = Number(key[1])
-    value.owner = key[0]
-    value.count = Number(value.count)
-    value.for_sale = Number(value.for_sale)
-    value.price = Number(value.price)
-    data.owners.push(value)
   }
 }
 
-const main_start = () => {
+const main_start = (sort = (a, b) => b.cnfrm_at - a.cnfrm_at) => {
   if (!dom_loaded || !data_loaded) return
 
   console.log(data.tokens)
   console.log(data.owners)
 
-  for (const t of data.tokens.filter(c => c.state == 1).sort((a, b) => b.cnfrm_at - a.cnfrm_at)) {
-    const min_price = data.owners.filter(c => c.token_id == t.id).reduce((a, c) => a > c.price && c.for_sale > 0 ? c.price : a, Infinity)
+  document.getElementById("tokens").innerHTML = ''
+  for (const t of data.tokens.filter(c => c.state == 1).sort(sort)) {
     document.getElementById("tokens").innerHTML += `<div class="card token" onclick="buy_open(${t.id})">
       ${t.image}
       <div class="card-body">
         <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
-        <b class="card-text">${min_price !== Infinity ? `Price starts from <a style="font-family:monospace;">${min_price / 1000000}tz</a>` : `Not for sale :(`}</b>
+        <b class="card-text">${t.min_price !== Infinity ? `Price starts from <a style="font-family:monospace;">${t.min_price / 1000000}tz</a>` : `Not for sale :(`}</b>
         <p></p>
         <div class="d-flex justify-content-between align-items-center">
           <button type="button" id="buy_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">More</button>
@@ -199,5 +203,28 @@ document.addEventListener('input', e => {
     }
     document.getElementById('buy_cost').innerHTML = `Total price: ${r / 1000000}tz`
     document.getElementById('buy_samt').innerHTML = `Selected amount: ${e.target.value}`
+  }
+  if (e.target.id == 'sort') {
+    console.log(e.target.value)
+    if (e.target.value == 'new') {
+      main_start()
+    }
+    if (e.target.value == 'pop') {
+      main_start((a, b) => b.owners_amount - a.owners_amount)
+    }
+    if (e.target.value == 'chp') {
+      main_start((a, b) => a.min_price - b.min_price)
+    }
+    if (e.target.value == 'exp') {
+      main_start((a, b) => {
+        if (a.min_price == Infinity && b.min_price == Infinity) return 0
+        if (a.min_price == Infinity) return 1
+        if (b.min_price == Infinity) return -1
+        return b.min_price - a.min_price
+      })
+    }
+    if (e.target.value == 'old') {
+      main_start((a, b) => a.cnfrm_at - b.cnfrm_at)
+    }
   }
 })

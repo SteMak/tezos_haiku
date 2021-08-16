@@ -283,3 +283,15 @@ footer {
 .state_type_copyright {
   background-color: #ffc6c6;
 }
+
+#sort {
+  appearance: none;
+  width: fit-content;
+}
+#sort:focus {
+  box-shadow: 0 0 0 0rem;
+  outline: 0;
+}
+#filters {
+  text-align: right;
+}
