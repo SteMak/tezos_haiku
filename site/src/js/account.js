@@ -31,7 +31,7 @@ check_wallet = async () => {
       <div id="created_tokens"></div>
     </div>
     <div class="center">
-      <button type="button" class="btn btn-sm btn-outline-secondary center" id="new_haiku_big_button">ORIGINATE NEW
+      <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW
         HAIKU</button>
     </div>
     <h2 class="fw-light center">Owned haikus</h2>
@@ -66,7 +66,7 @@ connect_wallet = async () => {
       <div id="created_tokens"></div>
     </div>
     <div class="center">
-      <button type="button" class="btn btn-sm btn-outline-secondary center" id="new_haiku_big_button">ORIGINATE NEW
+      <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW
         HAIKU</button>
     </div>
     <h2 class="fw-light center">Owned haikus</h2>
@@ -313,7 +313,7 @@ const token_mint_complex = async (id) => {
   document.getElementById('note_result').innerHTML = 'Please, confirm transaction in your wallet'
   contract = contract ? contract : await Tezos.wallet.at(contract_addr);
   try {
-    const result = await contract.methods.token_mint_complex(document.getElementById('mint_cont').value.slice(0, max_mint_length), Number(document.getElementById('mint_amount').value), 0, 0, 'en', parseInt(document.getElementById('mint_c_b').value.slice(1), 16), parseInt(document.getElementById('mint_c_t').value.slice(1), 16)).send();
+    const result = await contract.methods.token_mint_complex(document.getElementById('mint_cont').value.slice(0, max_mint_length) || ' ', Number(document.getElementById('mint_amount').value), 0, 0, 'en', parseInt(document.getElementById('mint_c_b').value.slice(1), 16), parseInt(document.getElementById('mint_c_t').value.slice(1), 16)).send();
     document.getElementById('note_result').innerHTML = 'Your request is in work. Wait some and update page to view changes.'
   } catch (error) {
     if (error.title == 'Aborted') {

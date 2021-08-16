@@ -19,7 +19,7 @@ Tezos.contract.at(contract_addr)
 check_wallet = async () => {
   const activeAccount = await Wallet.client.getActiveAccount();
   if (!activeAccount) {
-    document.getElementById('buttons_preview').innerHTML += '<a class="btn btn_secondary right_down_space" onclick="connect_wallet()">Connect wallet</a>'
+    document.getElementById('buttons_preview').innerHTML += '<a class="btn btn_primary right_down_space" onclick="connect_wallet()">Connect wallet</a>'
   } else {
     user_addr = activeAccount.address;
   }

@@ -44,6 +44,18 @@ header {
   background-color: #36485a;
   color: white;
 }
+.btn_primary:disabled {
+  background-color: #67809c;
+}
+
+.btn_outline_primary {
+  border-color: #4d719b;
+  color: #4d719b;
+}
+.btn_outline_primary:hover {
+  background-color: #4d719b;
+  color: white;
+}
 
 .btn_secondary {
   background-color: #6b7a8d;
@@ -284,6 +296,14 @@ footer {
   background-color: #ffc6c6;
 }
 
+#filters {
+  text-align: right;
+}
+.filter:disabled {
+  background-color: #4d719b;
+  opacity: 0.7;
+}
+
 #sort {
   appearance: none;
   width: fit-content;
@@ -291,7 +311,4 @@ footer {
 #sort:focus {
   box-shadow: 0 0 0 0rem;
   outline: 0;
-}
-#filters {
-  text-align: right;
 }

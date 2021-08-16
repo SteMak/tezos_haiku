@@ -22,7 +22,7 @@ Tezos.contract.at(contract_addr)
 check_wallet = async () => {
   const activeAccount = await Wallet.client.getActiveAccount();
   if (!activeAccount) {
-    document.getElementById('buttons_preview').innerHTML += '<a class="btn btn_secondary right_down_space" onclick="connect_wallet()">Connect wallet</a>'
+    document.getElementById('buttons_preview').innerHTML += '<a class="btn btn_primary right_down_space" onclick="connect_wallet()">Connect wallet</a>'
   } else {
     user_addr = activeAccount.address;
   }
@@ -130,7 +130,7 @@ buy_open = async (id) => {
             <label for="buy_amount" class="buy_label">Choose how many items you want to buy</label>
             <input type="range" class="form_range" min="1" max="${max_amount}" value="1" step="1" id="buy_amount">
           </div>
-          <div class="card buy_card" id="buy_samt">Selected amount: 1</div>
+          <div class="card buy_card" id="buy_samt">Selected amount: 1${1 == max_amount ? '(max)' : ''}</div>
           <div class="card buy_card" id="buy_cost">Total price: ${data.buy_cache[0].price / 1000000}tz</div>
           <p class="buy_note">Note: each item of haiku has its own price. But our alghorithm include the cheapest ones in the total price, so you shouldn't worry if price of five items is bigger than price of the first multiplied by five.</p>
         `: ''}
@@ -202,7 +202,7 @@ document.addEventListener('input', e => {
       }
     }
     document.getElementById('buy_cost').innerHTML = `Total price: ${r / 1000000}tz`
-    document.getElementById('buy_samt').innerHTML = `Selected amount: ${e.target.value}`
+    document.getElementById('buy_samt').innerHTML = `Selected amount: ${e.target.value}${e.target.value == e.target.max ? '(max)' : ''}`
   }
   if (e.target.id == 'sort') {
     console.log(e.target.value)
