@@ -483,7 +483,7 @@ check_wallet = async ()=>{
             document.location.reload();
         };
         document.getElementById('wallet').innerHTML = 'Disconnect or change wallet';
-        document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haikus</h2>\n    <div id="nothing_crt">\n      <div id="created_tokens"></div>\n    </div>\n    <div class="center">\n      <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW\n        HAIKU</button>\n    </div>\n    <h2 class="fw-light center">Owned haikus</h2>\n    <div id="nothing_own">\n      <div id="owned_tokens"></div>\n    </div>\n    <div id="token_popup"></div>`;
+        document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haiku</h2>\n    <div id="nothing_crt">\n      <div id="created_tokens"></div>\n    </div>\n    <div class="center">\n      <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW\n        HAIKU</button>\n    </div>\n    <h2 class="fw-light center">Owned haiku</h2>\n    <div id="nothing_own">\n      <div id="owned_tokens"></div>\n    </div>\n    <div id="token_popup"></div>`;
         data_loaded = true;
         main_start();
     }
@@ -506,7 +506,7 @@ connect_wallet = async ()=>{
             document.location.reload();
         };
         document.getElementById('wallet').innerHTML = 'Disconnect or change wallet';
-        document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haikus</h2>\n    <div id="nothing_crt">\n      <div id="created_tokens"></div>\n    </div>\n    <div class="center">\n      <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW\n        HAIKU</button>\n    </div>\n    <h2 class="fw-light center">Owned haikus</h2>\n    <div id="nothing_own">\n      <div id="owned_tokens"></div>\n    </div>\n    <div id="token_popup"></div>`;
+        document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haiku</h2>\n    <div id="nothing_crt">\n      <div id="created_tokens"></div>\n    </div>\n    <div class="center">\n      <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW\n        HAIKU</button>\n    </div>\n    <h2 class="fw-light center">Owned haiku</h2>\n    <div id="nothing_own">\n      <div id="owned_tokens"></div>\n    </div>\n    <div id="token_popup"></div>`;
         data_loaded = true;
         main_start();
     }
@@ -577,7 +577,7 @@ const main_start = ()=>{
         , Infinity);
         if (t.cnfrm_by.length + t.rejct_by.length >= min_voted_users && Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) && (rep.reduce((a, c)=>a || c.yes_by.length + c.no_by.length >= min_voted_on_report && c.yes_by.length / (c.yes_by.length + c.no_by.length) >= voted_positive_percent
         , rep.length == 0) || rep.reduce((a, c)=>a && c.yes_by.length + c.no_by.length >= min_voted_on_report
-        , true))) document.getElementById("created_tokens").innerHTML += `\n        <div class="card token">\n          ${t.image}\n          <div class="card-body state_type_${statuses_d[t.state]}">\n            <p class="card-text">Haiku #${t.id} written by you</p>\n            <div class="d-flex justify-content-between align-items-center">\n              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>\n            </div>\n            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>\n          </div>\n        </div>`;
+        , true))) document.getElementById("created_tokens").innerHTML += `\n        <div class="card token">\n          ${t.image}\n          <div class="card-body state_type_${statuses_d[t.state]}">\n            <p class="card-text">Haiku #${t.id} written by you</p>\n            <div class="d-flex justify-content-between align-items-center">\n              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>\n            </div>\n            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>\n          </div>\n        </div>`;
         else document.getElementById("created_tokens").innerHTML += `\n        <div class="card token" onclick="info_open(${t.id})">\n          ${t.image}\n          <div class="card-body state_type_${statuses_d[t.state]}">\n            <p class="card-text">Haiku #${t.id} written by you</p>\n            <b class="card-text">${min_price !== Infinity ? `Price starts from <a style="font-family:monospace;">${min_price / 1000000}tz</a>` : `Not for sale :(`}</b>\n            <p></p>\n            <div class="d-flex justify-content-between align-items-center">\n              <button type="button" id="buy_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">More</button>\n              <small class="text-muted">${t.cnfrm_at.toGMTString().split(', ')[1].slice(0, -7)}</small>\n            </div>\n          </div>\n        </div>`;
     }
     if (created.length == 0) document.getElementById("nothing_crt").innerHTML = `<h3 class="fw-light center">Nothing here :(</h3>`;
@@ -616,7 +616,7 @@ sell_open = (id)=>{
     document.getElementById('token_popup').innerHTML = `<section id="popup_overlay" class="overlay__">\n    <div class="container__">\n      <h1 class="fw-light buy_header">Update price Haiku #${t.id}</h1>\n      <div class="card token buy_image">\n        ${t.image}\n      </div>\n      <div class="buy_body">\n        <div class="card buy_card">Creator: ${t.creator == user_addr ? `you` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank">${t.creator.slice(0, 7)}...${t.creator.slice(-7)}</a>`}</div>\n        <div class="card buy_card">Created at: ${t.crted_at.toGMTString().split(', ')[1]}</div>\n        <div class="card buy_card">Total supply: ${t.amount}</div>\n        ${user_addr ? `<div class="card buy_card">You own: ${max_amount}</div>` : ""}\n        <div class="buy_inputs">\n          <label for="sell_amount" class="buy_label">Choose how many items you want to sell</label>\n          <input type="range" class="form_range" min="0" max="${max_amount}" value="${sale}" step="1" id="sell_amount">\n          <label for="sell_price" class="buy_label">Choose price for these items</label>\n          <input type="number" class="form_number" min="0" value="${price}" step="0.1" id="sell_price">\n        </div>\n        <div class="card buy_card" id="sell_samt">Selected amount to sell: ${sale}</div>\n        <div class="card buy_card" id="sell_cost">Selected price: ${price}tz</div>\n        <div class="btn-group buy_btn_group" role="group">\n          <button type="button" onclick="token_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>\n          <button type="button" id="sell_cfrm-${t.id}" class="btn btn_primary buy_cfrm_button">UPDATE PRICE</button>\n        </div>\n        <p class="buy_note" id="note_result"></p>\n      </div>\n    </div>\n  </section>`;
 };
 new_haiku_open = ()=>{
-    if (storage_loaded) document.getElementById('token_popup').innerHTML = `<section id="popup_overlay" class="overlay__">\n      <div class="container__">\n        <h1 class="fw-light buy_header">New Haiku Preview</h1>\n        <div class="card token buy_image">\n          <svg class="" width="338px" height="225px" role="img"\n            aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">\n            <title>Placeholder</title>\n            <rect width="100%" height="100%" fill="rgb(0,0,0)" rx="0.25rem" ry="0.25rem" id="canvas"></rect>\n            <text y="20%" fill="rgb(255,255,255)" font-size="1.2em" id="image_text"></text>\n          </svg>\n        </div>\n        <div class="buy_body">\n          <div class="buy_inputs">\n            <label for="mint_c" class="buy_label">Choose colors of background and text</label>\n            <div class="card buy_card">Backgroung: <input type="color" class="form_color" value="#000000" id="mint_c_b">  Text: <input type="color" class="form_color right_empty" value="#ffffff" id="mint_c_t"></div>\n            <label for="mint_amount" class="buy_label">Choose how many items of haiku you want to mint</label>\n            <input type="number" class="form_number" min="1" max="${max_mint_amount}" value="7" step="1" id="mint_amount">\n            <label for="mint_cont" class="buy_label">Provide yours haiku text below</label>\n            <textarea type="text" class="form_haiku_text" id="mint_cont"></textarea>\n          </div>\n          <div class="card buy_card" id="mint_samt">Selected amount to mint: 7</div>\n          <div class="btn-group buy_btn_group" role="group">\n            <button type="button" onclick="token_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>\n            ${user_addr ? `<button type="button" id="publish" class="btn btn_primary buy_cfrm_button">ORIGINATE</button>` : `<button type="button" id="publish" class="btn btn_primary buy_cfrm_button" disabled>ORIGINATE</button>`}\n            </div>\n            <p class="buy_note" id="note_result">${!user_addr ? 'Please, reload the page and connect your wallet to create haikus' : ''}</p>\n          </div>\n          <p class="buy_note" id="note_result"></p>\n        </div>\n      </div>\n    </section>`;
+    if (storage_loaded) document.getElementById('token_popup').innerHTML = `<section id="popup_overlay" class="overlay__">\n      <div class="container__">\n        <h1 class="fw-light buy_header">New Haiku Preview</h1>\n        <div class="card token buy_image">\n          <svg class="" width="338px" height="225px" role="img"\n            aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">\n            <title>Placeholder</title>\n            <rect width="100%" height="100%" fill="rgb(0,0,0)" rx="0.25rem" ry="0.25rem" id="canvas"></rect>\n            <text y="20%" fill="rgb(255,255,255)" font-size="1.2em" id="image_text"></text>\n          </svg>\n        </div>\n        <div class="buy_body">\n          <div class="buy_inputs">\n            <label for="mint_c" class="buy_label">Choose colors of background and text</label>\n            <div class="card buy_card">Backgroung: <input type="color" class="form_color" value="#000000" id="mint_c_b">  Text: <input type="color" class="form_color right_empty" value="#ffffff" id="mint_c_t"></div>\n            <label for="mint_amount" class="buy_label">Choose how many items of haiku you want to mint</label>\n            <input type="number" class="form_number" min="1" max="${max_mint_amount}" value="7" step="1" id="mint_amount">\n            <label for="mint_cont" class="buy_label">Provide yours haiku text below</label>\n            <textarea type="text" class="form_haiku_text" id="mint_cont"></textarea>\n          </div>\n          <div class="card buy_card" id="mint_samt">Selected amount to mint: 7</div>\n          <div class="btn-group buy_btn_group" role="group">\n            <button type="button" onclick="token_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>\n            ${user_addr ? `<button type="button" id="publish" class="btn btn_primary buy_cfrm_button">ORIGINATE</button>` : `<button type="button" id="publish" class="btn btn_primary buy_cfrm_button" disabled>ORIGINATE</button>`}\n            </div>\n            <p class="buy_note" id="note_result">${!user_addr ? 'Please, reload the page and connect your wallet to create haiku' : ''}</p>\n          </div>\n          <p class="buy_note" id="note_result"></p>\n        </div>\n      </div>\n    </section>`;
 };
 token_close = ()=>{
     document.getElementById('token_popup').innerHTML = '';
@@ -12156,9 +12156,9 @@ http.METHODS = [
 ];
 
 },{"./lib/request":"3C442","./lib/response":"hE1hx","xtend":"6h06z","builtin-status-codes":"avvrf","url":"8glPb"}],"3C442":[function(require,module,exports) {
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var process = require("process");
-var Buffer = require("buffer").Buffer;
 var capability = require('./capability');
 var inherits = require('inherits');
 var response = require('./response');
@@ -12509,8 +12509,8 @@ module.exports = function inherits1(ctor, superCtor) {
 };
 
 },{}],"hE1hx":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var process = require("process");
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var capability = require('./capability');
 var inherits = require('inherits');
@@ -12698,8 +12698,8 @@ exports.finished = require('./lib/internal/streams/end-of-stream.js');
 exports.pipeline = require('./lib/internal/streams/pipeline.js');
 
 },{"./lib/_stream_readable.js":"bBSnt","./lib/_stream_writable.js":"3GFqe","./lib/_stream_duplex.js":"TRL31","./lib/_stream_transform.js":"aiFov","./lib/_stream_passthrough.js":"45RN3","./lib/internal/streams/end-of-stream.js":"5sVef","./lib/internal/streams/pipeline.js":"fePuh"}],"bBSnt":[function(require,module,exports) {
-var process = require("process");
 var global = arguments[3];
+var process = require("process");
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14456,8 +14456,8 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 });
 
 },{"process":"6Upk8","./_stream_readable":"bBSnt","./_stream_writable":"3GFqe","inherits":"bYMAq"}],"3GFqe":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -47910,8 +47910,8 @@ class P2PCommunicationClient extends _communicationClient.CommunicationClient {
 }(this);
 
 },{"libsodium":"cjMMh"}],"cjMMh":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var global = arguments[3];
+var Buffer = require("buffer").Buffer;
 var __dirname = "node_modules/libsodium/dist/modules";
 var process = require("process");
 !function(A) {
@@ -53055,8 +53055,8 @@ module.exports = function(iterations, keylen) {
 };
 
 },{}],"6mpWq":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 var defaultEncoding;
 /* istanbul ignore next */ if (global.process && global.process.browser) defaultEncoding = 'utf-8';
 else if (global.process && global.process.version) {

@@ -12065,9 +12065,9 @@ http.METHODS = [
 ];
 
 },{"./lib/request":"3C442","./lib/response":"hE1hx","xtend":"6h06z","builtin-status-codes":"avvrf","url":"8glPb"}],"3C442":[function(require,module,exports) {
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var process = require("process");
-var Buffer = require("buffer").Buffer;
 var capability = require('./capability');
 var inherits = require('inherits');
 var response = require('./response');
@@ -12418,8 +12418,8 @@ module.exports = function inherits1(ctor, superCtor) {
 };
 
 },{}],"hE1hx":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var process = require("process");
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var capability = require('./capability');
 var inherits = require('inherits');
@@ -12607,8 +12607,8 @@ exports.finished = require('./lib/internal/streams/end-of-stream.js');
 exports.pipeline = require('./lib/internal/streams/pipeline.js');
 
 },{"./lib/_stream_readable.js":"bBSnt","./lib/_stream_writable.js":"3GFqe","./lib/_stream_duplex.js":"TRL31","./lib/_stream_transform.js":"aiFov","./lib/_stream_passthrough.js":"45RN3","./lib/internal/streams/end-of-stream.js":"5sVef","./lib/internal/streams/pipeline.js":"fePuh"}],"bBSnt":[function(require,module,exports) {
-var process = require("process");
 var global = arguments[3];
+var process = require("process");
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14365,8 +14365,8 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 });
 
 },{"process":"6Upk8","./_stream_readable":"bBSnt","./_stream_writable":"3GFqe","inherits":"bYMAq"}],"3GFqe":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -47819,8 +47819,8 @@ class P2PCommunicationClient extends _communicationClient.CommunicationClient {
 }(this);
 
 },{"libsodium":"cjMMh"}],"cjMMh":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var global = arguments[3];
+var Buffer = require("buffer").Buffer;
 var __dirname = "node_modules/libsodium/dist/modules";
 var process = require("process");
 !function(A) {
@@ -52964,8 +52964,8 @@ module.exports = function(iterations, keylen) {
 };
 
 },{}],"6mpWq":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 var defaultEncoding;
 /* istanbul ignore next */ if (global.process && global.process.browser) defaultEncoding = 'utf-8';
 else if (global.process && global.process.version) {

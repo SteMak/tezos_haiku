@@ -566,8 +566,8 @@ const main_start = ()=>{
         const eq_counter = eq_words(nearest, t.content);
         if (t.cnfrm_by.length + t.rejct_by.length >= min_voted_users && Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) && (rep.reduce((a, c)=>a || c.yes_by.length + c.no_by.length >= min_voted_on_report && c.yes_by.length / (c.yes_by.length + c.no_by.length) >= voted_positive_percent
         , rep.length == 0) || rep.reduce((a, c)=>a && c.yes_by.length + c.no_by.length >= min_voted_on_report
-        , true))) document.getElementById("tokens").innerHTML += `\n        <div class="card token">\n          ${t.image}\n          <div class="card-body">\n            <p class="card-text">Haiku #${t.id} written by ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank" style="font-family:monospace; font-size: initial;">${t.creator}</a>`}</p>\n            <div class="d-flex justify-content-between align-items-center">\n              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button" ${!user_addr ? 'disabled' : ''}>VERIFY</button>\n            </div>\n            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>\n          </div>\n        </div>`;
-        else document.getElementById("tokens").innerHTML += `\n        <div class="card token">\n          ${t.image}\n          <div class="card-body">\n            <p class="card-text" style="margin-bottom: 0;">Haiku #${t.id} written by ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank" style="font-family:monospace; font-size: initial;">${t.creator}</a>`}</p>\n          </div>\n          ${nearest && eq_counter >= 3 ? `\n            <div class="card-body plagiarism">\n              <p style="margin-bottom:5px;">Possible plagiarism of:</p><p style="margin-bottom:0;">${nearest.split('\n').join('<br>')}</p>\n            </div>` : ''}\n          <div class="card-body">\n            <div class="voting">\n              <button type="button" class="btn btn_voting_good" id="good_vote-${t.id}" ${t.cnfrm_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n              <div class="progress" style="width: 100%;margin: 5px;">\n                <div class="progress-bar" role="progressbar" id="voting_bar-${t.id}" style="width: ${t.cnfrm_by.length + t.rejct_by.length ? t.cnfrm_by.length / (t.cnfrm_by.length + t.rejct_by.length) * 100 : 50}%"></div>\n              </div>\n              <button type="button" class="btn btn_voting_bad" id="bad_vote-${t.id}" ${t.rejct_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n            </div>\n            <p class="buy_note" id="note_vote-${t.id}">Total number of votes: ${t.cnfrm_by.length + t.rejct_by.length}. You have${t.cnfrm_by.includes(user_addr) ? ' voted for green' : t.rejct_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>\n            <p></p>\n            <div class="d-flex justify-content-between align-items-center">\n              ${Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) ? '<p></p>' : `<button type="button" id="report_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">Report</button>`}\n              <small class="text-muted">${t.crted_at.toGMTString().split(', ')[1].slice(0, -7)}</small>\n            </div>\n            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>\n          </div>\n          ${rep.reduce((a, c)=>a + `\n            <div class="card-body viol_cprt">\n              <p class="card-text">Possible violation of copyright!</p>\n              <p class="card-text">This is known haiku of <a style="font-family:monospace; font-size: initial;">${c.orig_author}</a></p>\n              <p class="card-text">Prove link: <a href="${c.orig_link}" target="_blank">proves here</a></p>\n              <div class="voting">\n                <button type="button" class="btn btn_voting_good" id="rep_good_vote-${c.id}" ${c.yes_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n                <div class="progress" style="width: 100%;margin: 5px;">\n                  <div class="progress-bar" role="progressbar" id="rep_voting_bar-${c.id}" style="width: ${c.yes_by.length + c.no_by.length ? c.yes_by.length / (c.yes_by.length + c.no_by.length) * 100 : 50}%"></div>\n                </div>\n                <button type="button" class="btn btn_voting_bad" id="rep_bad_vote-${c.id}" ${c.no_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n              </div>\n              <p class="buy_note" id="rep_note_vote-${c.id}">Total number of votes: ${c.yes_by.length + c.no_by.length}. You have${c.yes_by.includes(user_addr) ? ' voted for green' : c.no_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>\n              <p class="buy_note" id="rep_note_result-${c.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>\n            </div>`
+        , true))) document.getElementById("tokens").innerHTML += `\n        <div class="card token">\n          ${t.image}\n          <div class="card-body">\n            <p class="card-text">Haiku #${t.id} written by ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank" style="font-family:monospace; font-size: initial;">${t.creator}</a>`}</p>\n            <div class="d-flex justify-content-between align-items-center">\n              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button" ${!user_addr ? 'disabled' : ''}>VERIFY</button>\n            </div>\n            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>\n          </div>\n        </div>`;
+        else document.getElementById("tokens").innerHTML += `\n        <div class="card token">\n          ${t.image}\n          <div class="card-body">\n            <p class="card-text" style="margin-bottom: 0;">Haiku #${t.id} written by ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank" style="font-family:monospace; font-size: initial;">${t.creator}</a>`}</p>\n          </div>\n          ${nearest && eq_counter >= 3 ? `\n            <div class="card-body plagiarism">\n              <p style="margin-bottom:5px;">Possible plagiarism of:</p><p style="margin-bottom:0;">${nearest.split('\n').join('<br>')}</p>\n            </div>` : ''}\n          <div class="card-body">\n            <div class="voting">\n              <button type="button" class="btn btn_voting_good" id="good_vote-${t.id}" ${t.cnfrm_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n              <div class="progress" style="width: 100%;margin: 5px;">\n                <div class="progress-bar" role="progressbar" id="voting_bar-${t.id}" style="width: ${t.cnfrm_by.length + t.rejct_by.length ? t.cnfrm_by.length / (t.cnfrm_by.length + t.rejct_by.length) * 100 : 50}%"></div>\n              </div>\n              <button type="button" class="btn btn_voting_bad" id="bad_vote-${t.id}" ${t.rejct_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n            </div>\n            <p class="buy_note" id="note_vote-${t.id}">Total number of votes: ${t.cnfrm_by.length + t.rejct_by.length}. You have${t.cnfrm_by.includes(user_addr) ? ' voted for green' : t.rejct_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>\n            <p></p>\n            <div class="d-flex justify-content-between align-items-center">\n              ${Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) ? '<p></p>' : `<button type="button" id="report_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">Report</button>`}\n              <small class="text-muted">${t.crted_at.toGMTString().split(', ')[1].slice(0, -7)}</small>\n            </div>\n            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>\n          </div>\n          ${rep.reduce((a, c)=>a + `\n            <div class="card-body viol_cprt">\n              <p class="card-text">Possible violation of copyright!</p>\n              <p class="card-text">This is known haiku of <a style="font-family:monospace; font-size: initial;">${c.orig_author}</a></p>\n              <p class="card-text">Prove link: <a href="${c.orig_link}" target="_blank">proves here</a></p>\n              <div class="voting">\n                <button type="button" class="btn btn_voting_good" id="rep_good_vote-${c.id}" ${c.yes_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n                <div class="progress" style="width: 100%;margin: 5px;">\n                  <div class="progress-bar" role="progressbar" id="rep_voting_bar-${c.id}" style="width: ${c.yes_by.length + c.no_by.length ? c.yes_by.length / (c.yes_by.length + c.no_by.length) * 100 : 50}%"></div>\n                </div>\n                <button type="button" class="btn btn_voting_bad" id="rep_bad_vote-${c.id}" ${c.no_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>\n              </div>\n              <p class="buy_note" id="rep_note_vote-${c.id}">Total number of votes: ${c.yes_by.length + c.no_by.length}. You have${c.yes_by.includes(user_addr) ? ' voted for green' : c.no_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>\n              <p class="buy_note" id="rep_note_result-${c.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>\n            </div>`
         , '')}\n        </div>`;
     }
 };
@@ -576,7 +576,7 @@ report_open = async (id)=>{
     const rep = data.reports.filter((c)=>c.rep_t_id == id
     );
     document.getElementById('report_popup').innerHTML = `<section id="report_popup_overlay" class="overlay__">\n    <div class="container__">\n      <h1 class="fw-light buy_header">Report on Haiku #${t.id}</h1>\n      <div class="card token buy_image">\n        ${t.image}\n      </div>\n      <div class="buy_body">\n        <div class="buy_inputs">\n          <label for="real_author" class="buy_label">Please enter name of real author of this haiku</label>\n          <input type="text" class="form_range" id="real_author">\n          <label for="real_link" class="buy_label">Please past a prove link here</label>\n          <input type="text" class="form_range" id="real_link">\n        </div>\n        <div class="btn-group buy_btn_group" role="group">\n          <button type="button" onclick="report_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>\n          ${user_addr && rep.filter((c)=>c.reporter_adrs == user_addr
-    ).length == 0 ? `<button type="button" id="report_cfrm-${id}" class="btn btn_primary buy_cfrm_button">REPORT</button>` : `<button type="button" id="report_cfrm-${id}" class="btn btn_primary buy_cfrm_button" disabled>REPORT</button>`}\n        </div>\n        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to report on haikus' : rep.filter((c)=>c.reporter_adrs == user_addr
+    ).length == 0 ? `<button type="button" id="report_cfrm-${id}" class="btn btn_primary buy_cfrm_button">REPORT</button>` : `<button type="button" id="report_cfrm-${id}" class="btn btn_primary buy_cfrm_button" disabled>REPORT</button>`}\n        </div>\n        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to report on haiku' : rep.filter((c)=>c.reporter_adrs == user_addr
     ).length > 0 ? 'You have already sent report on this haiku' : ''}</p>\n      </div>\n    </div>\n  </section>`;
 };
 report_close = ()=>{
@@ -12154,9 +12154,9 @@ http.METHODS = [
 ];
 
 },{"./lib/request":"3C442","./lib/response":"hE1hx","xtend":"6h06z","builtin-status-codes":"avvrf","url":"8glPb"}],"3C442":[function(require,module,exports) {
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var process = require("process");
-var Buffer = require("buffer").Buffer;
 var capability = require('./capability');
 var inherits = require('inherits');
 var response = require('./response');
@@ -12507,8 +12507,8 @@ module.exports = function inherits1(ctor, superCtor) {
 };
 
 },{}],"hE1hx":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var process = require("process");
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var capability = require('./capability');
 var inherits = require('inherits');
@@ -12696,8 +12696,8 @@ exports.finished = require('./lib/internal/streams/end-of-stream.js');
 exports.pipeline = require('./lib/internal/streams/pipeline.js');
 
 },{"./lib/_stream_readable.js":"bBSnt","./lib/_stream_writable.js":"3GFqe","./lib/_stream_duplex.js":"TRL31","./lib/_stream_transform.js":"aiFov","./lib/_stream_passthrough.js":"45RN3","./lib/internal/streams/end-of-stream.js":"5sVef","./lib/internal/streams/pipeline.js":"fePuh"}],"bBSnt":[function(require,module,exports) {
-var process = require("process");
 var global = arguments[3];
+var process = require("process");
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14454,8 +14454,8 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 });
 
 },{"process":"6Upk8","./_stream_readable":"bBSnt","./_stream_writable":"3GFqe","inherits":"bYMAq"}],"3GFqe":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -47908,8 +47908,8 @@ class P2PCommunicationClient extends _communicationClient.CommunicationClient {
 }(this);
 
 },{"libsodium":"cjMMh"}],"cjMMh":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var global = arguments[3];
+var Buffer = require("buffer").Buffer;
 var __dirname = "node_modules/libsodium/dist/modules";
 var process = require("process");
 !function(A) {
@@ -53053,8 +53053,8 @@ module.exports = function(iterations, keylen) {
 };
 
 },{}],"6mpWq":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 var defaultEncoding;
 /* istanbul ignore next */ if (global.process && global.process.browser) defaultEncoding = 'utf-8';
 else if (global.process && global.process.version) {

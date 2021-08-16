@@ -552,7 +552,7 @@ buy_open = async (id)=>{
     , 0);
     document.getElementById('buy_popup').innerHTML = `<section id="buy_popup_overlay" class="overlay__">\n    <div class="container__">\n      <h1 class="fw-light buy_header">Buy Haiku #${t.id}</h1>\n      <div class="card token buy_image">\n        ${t.image}\n      </div>\n      <div class="buy_body">\n        <div class="card buy_card">Creator: ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank">${t.creator.slice(0, 7)}...${t.creator.slice(-7)}</a>`}</div>\n        <div class="card buy_card">Created at: ${t.crted_at.toGMTString().split(', ')[1]}</div>\n        <div class="card buy_card">Total supply: ${t.amount}</div>\n        ${user_addr ? `<div class="card buy_card">You own: ${data.owners.filter((c)=>c.owner == user_addr && c.token_id == t.id
     ).reduce((a, c)=>a + c.count
-    , 0)}</div>` : ""}\n        ${data.buy_cache.length ? `\n          <div class="buy_inputs">\n            <label for="buy_amount" class="buy_label">Choose how many items you want to buy</label>\n            <input type="range" class="form_range" min="1" max="${max_amount}" value="1" step="1" id="buy_amount">\n          </div>\n          <div class="card buy_card" id="buy_samt">Selected amount: 1${1 == max_amount ? '(max)' : ''}</div>\n          <div class="card buy_card" id="buy_cost">Total price: ${data.buy_cache[0].price / 1000000}tz</div>\n          <p class="buy_note">Note: each item of haiku has its own price. But our alghorithm include the cheapest ones in the total price, so you shouldn't worry if price of five items is bigger than price of the first multiplied by five.</p>\n        ` : ''}\n        <div class="btn-group buy_btn_group" role="group">\n          <button type="button" onclick="buy_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>\n          ${data.buy_cache.length && user_addr ? `<button type="button" id="buy_cfrm-${id}" class="btn btn_primary buy_cfrm_button">BUY</button>` : `<button type="button" id="buy_cfrm-${id}" class="btn btn_primary buy_cfrm_button" disabled>BUY</button>`}\n        </div>\n        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to buy haikus' : ''}</p>\n      </div>\n    </div>\n  </section>`;
+    , 0)}</div>` : ""}\n        ${data.buy_cache.length ? `\n          <div class="buy_inputs">\n            <label for="buy_amount" class="buy_label">Choose how many items you want to buy</label>\n            <input type="range" class="form_range" min="1" max="${max_amount}" value="1" step="1" id="buy_amount">\n          </div>\n          <div class="card buy_card" id="buy_samt">Selected amount: 1${1 == max_amount ? '(max)' : ''}</div>\n          <div class="card buy_card" id="buy_cost">Total price: ${data.buy_cache[0].price / 1000000}tz</div>\n          <p class="buy_note">Note: each item of haiku has its own price. But our alghorithm include the cheapest ones in the total price, so you shouldn't worry if price of five items is bigger than price of the first multiplied by five.</p>\n        ` : ''}\n        <div class="btn-group buy_btn_group" role="group">\n          <button type="button" onclick="buy_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>\n          ${data.buy_cache.length && user_addr ? `<button type="button" id="buy_cfrm-${id}" class="btn btn_primary buy_cfrm_button">BUY</button>` : `<button type="button" id="buy_cfrm-${id}" class="btn btn_primary buy_cfrm_button" disabled>BUY</button>`}\n        </div>\n        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to buy haiku' : ''}</p>\n      </div>\n    </div>\n  </section>`;
 };
 buy_close = ()=>{
     document.getElementById('buy_popup').innerHTML = '';
@@ -12094,9 +12094,9 @@ http.METHODS = [
 ];
 
 },{"./lib/request":"3C442","./lib/response":"hE1hx","xtend":"6h06z","builtin-status-codes":"avvrf","url":"8glPb"}],"3C442":[function(require,module,exports) {
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var process = require("process");
-var Buffer = require("buffer").Buffer;
 var capability = require('./capability');
 var inherits = require('inherits');
 var response = require('./response');
@@ -12447,8 +12447,8 @@ module.exports = function inherits1(ctor, superCtor) {
 };
 
 },{}],"hE1hx":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var process = require("process");
+var Buffer = require("buffer").Buffer;
 var global = arguments[3];
 var capability = require('./capability');
 var inherits = require('inherits');
@@ -12636,8 +12636,8 @@ exports.finished = require('./lib/internal/streams/end-of-stream.js');
 exports.pipeline = require('./lib/internal/streams/pipeline.js');
 
 },{"./lib/_stream_readable.js":"bBSnt","./lib/_stream_writable.js":"3GFqe","./lib/_stream_duplex.js":"TRL31","./lib/_stream_transform.js":"aiFov","./lib/_stream_passthrough.js":"45RN3","./lib/internal/streams/end-of-stream.js":"5sVef","./lib/internal/streams/pipeline.js":"fePuh"}],"bBSnt":[function(require,module,exports) {
-var process = require("process");
 var global = arguments[3];
+var process = require("process");
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14394,8 +14394,8 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 });
 
 },{"process":"6Upk8","./_stream_readable":"bBSnt","./_stream_writable":"3GFqe","inherits":"bYMAq"}],"3GFqe":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -47848,8 +47848,8 @@ class P2PCommunicationClient extends _communicationClient.CommunicationClient {
 }(this);
 
 },{"libsodium":"cjMMh"}],"cjMMh":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
 var global = arguments[3];
+var Buffer = require("buffer").Buffer;
 var __dirname = "node_modules/libsodium/dist/modules";
 var process = require("process");
 !function(A) {
@@ -52993,8 +52993,8 @@ module.exports = function(iterations, keylen) {
 };
 
 },{}],"6mpWq":[function(require,module,exports) {
-var global = arguments[3];
 var process = require("process");
+var global = arguments[3];
 var defaultEncoding;
 /* istanbul ignore next */ if (global.process && global.process.browser) defaultEncoding = 'utf-8';
 else if (global.process && global.process.version) {
