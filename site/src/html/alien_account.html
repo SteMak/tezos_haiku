@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.8">
-  <meta name="description" content="Site for tezos contract, which allows to post, sell and claim haikus.">
+  <meta name="description" content="Site for tezos contract, which allows to post, sell and claim haiku.">
   <meta name="author" content="SteMak">
 
   <title>Tezos Haiku</title>
@@ -48,12 +48,12 @@
     </section>
 
     <div class="container" id="main_container">
-      <h2 class="fw-light center">Created haikus</h2>
+      <h2 class="fw-light center">Created haiku</h2>
       <div id="nothing_crt">
         <div id="created_tokens"></div>
       </div>
       <div class="space_between_lists"></div>
-      <h2 class="fw-light center">Owned haikus</h2>
+      <h2 class="fw-light center">Owned haiku</h2>
       <div id="nothing_own">
         <div id="owned_tokens"></div>
       </div>
@@ -80,7 +80,7 @@
     if (addr) {
       document.title = `Tezos Haiku - ${addr}`;
       document.getElementById('welcome').innerHTML = `Welcome to account of <a style="font-size: smaller;font-family: monospace;">${s_addr}</a>`
-      document.getElementById('desc').innerHTML = `Here you can see haikus that <a style="word-break: break-all;font-size: smaller;font-family: monospace;">${addr}</a> have written or bought.`
+      document.getElementById('desc').innerHTML = `Here you can see haiku that <a style="word-break: break-all;font-size: smaller;font-family: monospace;">${addr}</a> have written or bought.`
     }
   </script>
   <script src="/src/js/united.js"></script>

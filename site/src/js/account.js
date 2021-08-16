@@ -27,7 +27,7 @@ check_wallet = async () => {
     document.getElementById('copy_link').style.display = ''
     document.getElementById('wallet').onclick = () => { disconnect_wallet(); document.location.reload() }
     document.getElementById('wallet').innerHTML = 'Disconnect or change wallet'
-    document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haikus</h2>
+    document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haiku</h2>
     <div id="nothing_crt">
       <div id="created_tokens"></div>
     </div>
@@ -35,7 +35,7 @@ check_wallet = async () => {
       <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW
         HAIKU</button>
     </div>
-    <h2 class="fw-light center">Owned haikus</h2>
+    <h2 class="fw-light center">Owned haiku</h2>
     <div id="nothing_own">
       <div id="owned_tokens"></div>
     </div>
@@ -63,7 +63,7 @@ connect_wallet = async () => {
     document.getElementById('copy_link').style.display = ''
     document.getElementById('wallet').onclick = () => { disconnect_wallet(); document.location.reload() }
     document.getElementById('wallet').innerHTML = 'Disconnect or change wallet'
-    document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haikus</h2>
+    document.getElementById('main_container').innerHTML = `<h2 class="fw-light center">Created haiku</h2>
     <div id="nothing_crt">
       <div id="created_tokens"></div>
     </div>
@@ -71,7 +71,7 @@ connect_wallet = async () => {
       <button type="button" class="btn btn-sm btn_outline_primary center" id="new_haiku_big_button">ORIGINATE NEW
         HAIKU</button>
     </div>
-    <h2 class="fw-light center">Owned haikus</h2>
+    <h2 class="fw-light center">Owned haiku</h2>
     <div id="nothing_own">
       <div id="owned_tokens"></div>
     </div>
@@ -162,7 +162,7 @@ const main_start = () => {
             <div class="d-flex justify-content-between align-items-center">
               <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>
             </div>
-            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
+            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>
           </div>
         </div>`
     } else {
@@ -289,7 +289,7 @@ new_haiku_open = () => {
             <button type="button" onclick="token_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>
             ${user_addr ? `<button type="button" id="publish" class="btn btn_primary buy_cfrm_button">ORIGINATE</button>` : `<button type="button" id="publish" class="btn btn_primary buy_cfrm_button" disabled>ORIGINATE</button>`}
             </div>
-            <p class="buy_note" id="note_result">${!user_addr ? 'Please, reload the page and connect your wallet to create haikus' : ''}</p>
+            <p class="buy_note" id="note_result">${!user_addr ? 'Please, reload the page and connect your wallet to create haiku' : ''}</p>
           </div>
           <p class="buy_note" id="note_result"></p>
         </div>

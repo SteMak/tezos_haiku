@@ -133,7 +133,7 @@ const main_start = () => {
             <div class="d-flex justify-content-between align-items-center">
               <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button" ${!user_addr ? 'disabled' : ''}>VERIFY</button>
             </div>
-            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
+            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>
           </div>
         </div>`
     } else {
@@ -162,7 +162,7 @@ const main_start = () => {
               ${Number(t.cnfrm_at) + min_voted_time * 1000 <= Number(new Date()) ? '<p></p>' : `<button type="button" id="report_button-${t.id}" class="btn btn-sm btn-outline-secondary buy_button">Report</button>`}
               <small class="text-muted">${t.crted_at.toGMTString().split(', ')[1].slice(0, -7)}</small>
             </div>
-            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
+            <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>
           </div>
           ${rep.reduce((a, c) => a + `
             <div class="card-body viol_cprt">
@@ -177,7 +177,7 @@ const main_start = () => {
                 <button type="button" class="btn btn_voting_bad" id="rep_bad_vote-${c.id}" ${c.no_by.includes(user_addr) || !user_addr ? 'disabled' : ''}></button>
               </div>
               <p class="buy_note" id="rep_note_vote-${c.id}">Total number of votes: ${c.yes_by.length + c.no_by.length}. You have${c.yes_by.includes(user_addr) ? ' voted for green' : c.no_by.includes(user_addr) ? ' voted for red' : "n't voted"}</p>
-              <p class="buy_note" id="rep_note_result-${c.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
+              <p class="buy_note" id="rep_note_result-${c.id}">${!user_addr ? 'Please, connect your wallet to vote for haiku' : ''}</p>
             </div>`, '')}
         </div>`
     }
@@ -204,7 +204,7 @@ report_open = async (id) => {
           <button type="button" onclick="report_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>
           ${user_addr && rep.filter(c => c.reporter_adrs == user_addr).length == 0 ? `<button type="button" id="report_cfrm-${id}" class="btn btn_primary buy_cfrm_button">REPORT</button>` : `<button type="button" id="report_cfrm-${id}" class="btn btn_primary buy_cfrm_button" disabled>REPORT</button>`}
         </div>
-        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to report on haikus' : rep.filter(c => c.reporter_adrs == user_addr).length > 0 ? 'You have already sent report on this haiku' : ''}</p>
+        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to report on haiku' : rep.filter(c => c.reporter_adrs == user_addr).length > 0 ? 'You have already sent report on this haiku' : ''}</p>
       </div>
     </div>
   </section>`

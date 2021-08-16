@@ -138,7 +138,7 @@ buy_open = async (id) => {
           <button type="button" onclick="buy_close()" class="btn btn_secondary buy_cfrm_button">CANCEL</button>
           ${data.buy_cache.length && user_addr ? `<button type="button" id="buy_cfrm-${id}" class="btn btn_primary buy_cfrm_button">BUY</button>` : `<button type="button" id="buy_cfrm-${id}" class="btn btn_primary buy_cfrm_button" disabled>BUY</button>`}
         </div>
-        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to buy haikus' : ''}</p>
+        <p class="buy_note" id="note_result">${!user_addr ? 'Please, connect your wallet to buy haiku' : ''}</p>
       </div>
     </div>
   </section>`
