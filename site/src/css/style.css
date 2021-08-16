@@ -7,6 +7,10 @@ body {
   user-select: none;
 }
 
+.alien:link, .alien:visited {
+  color: black;
+}
+
 .center {
   text-align: center;
   align-self: center;
@@ -180,6 +184,7 @@ footer {
   font-family:monospace;
   font-size: 14px;
   flex-direction: row;
+  white-space: pre;
 }
 .buy_btn_group {
   width: 100%;
@@ -200,8 +205,6 @@ footer {
   width: 100%;
 }
 .form_color {
-  margin-left: 5px;
-  margin-right: 15px;
   height: 20px;
 }
 .form_haiku_text {

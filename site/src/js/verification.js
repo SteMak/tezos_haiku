@@ -129,9 +129,9 @@ const main_start = () => {
         <div class="card token">
           ${t.image}
           <div class="card-body">
-            <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+            <p class="card-text">Haiku #${t.id} written by ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank" style="font-family:monospace; font-size: initial;">${t.creator}</a>`}</p>
             <div class="d-flex justify-content-between align-items-center">
-              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>
+              <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button" ${!user_addr ? 'disabled' : ''}>VERIFY</button>
             </div>
             <p class="buy_note" id="note_result-${t.id}">${!user_addr ? 'Please, connect your wallet to vote for haikus' : ''}</p>
           </div>
@@ -141,7 +141,7 @@ const main_start = () => {
         <div class="card token">
           ${t.image}
           <div class="card-body">
-            <p class="card-text" style="margin-bottom: 0;">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+            <p class="card-text" style="margin-bottom: 0;">Haiku #${t.id} written by ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank" style="font-family:monospace; font-size: initial;">${t.creator}</a>`}</p>
           </div>
           ${nearest && eq_counter >= 3 ? `
             <div class="card-body plagiarism">

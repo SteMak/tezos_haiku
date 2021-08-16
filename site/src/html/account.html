@@ -29,9 +29,10 @@
         <a href="/src/html/verification.html" class="navbar-brand">
           <strong>Verification</strong>
         </a>
-        <a href="/src/html/account.html" class="navbar-brand ">
+        <a href="/src/html/account.html" class="navbar-brand" id="account_link">
           <strong>Account</strong>
         </a>
+        <a href="/src/html/alien_account.html" id="alien_link" style="display: none;"></a>
       </div>
     </div>
   </header>
@@ -66,10 +67,12 @@
     </div>
   </footer>
 
+  <script src="/src/js/united.js"></script>
   <script>
     var connect_wallet, disconnect_wallet, info_open, sell_open, token_close
+    alien_link = new URL(document.getElementById('alien_link').href).pathname;
+    account_link = new URL(document.getElementById('account_link').href).pathname;
   </script>
-  <script src="/src/js/united.js"></script>
   <script type="module" src="/src/js/account.js"></script>
 </body>
 

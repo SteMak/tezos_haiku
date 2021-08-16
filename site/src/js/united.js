@@ -4,6 +4,8 @@ const network = "florencenet"
 
 const contract_addr = 'KT1LA2aMYXi4DVLQMtxQZZEbvW9eRnBUwxnk'
 let user_addr = ''
+let alien_link = ''
+let account_link = ''
 
 let contract = false
 const statuses = ['Proposed', 'Confirmed', 'Rejected', 'Violates copyright']

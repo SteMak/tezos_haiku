@@ -8,7 +8,7 @@
   <meta name="description" content="Site for tezos contract, which allows to post, sell and claim haikus.">
   <meta name="author" content="SteMak">
 
-  <title>Tezos Haiku - Verification</title>
+  <title>Tezos Haiku</title>
   <link href="/src/css/bootstrap.min.css" rel="stylesheet">
   <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 
@@ -39,26 +39,32 @@
 
   <main>
     <section class="description_container">
-      <h1 class="fw-light">Verification</h1>
-      <p class="lead">Here you can participate in confirming or rejecting of new haikus. As soon as haiku is published
-        it goes here in order to get community acceptance. After 2 weeks and 100 users voted, it becomes confirmed or
-        rejected. Also please report if new haiku abuses copyright, community will vote for it too.</p>
-      <p id="buttons_preview">
+      <h1 class="fw-light" id="welcome">No account found</h1>
+      <p class="lead" id="desc"></p>
+      <p>
         <a href="/src/html/index.html" class="btn btn_primary right_down_space">Back to gallery</a>
-        <a href="/src/html/account.html" class="btn btn_secondary right_down_space">Proceed to account</a>
+        <a href="/src/html/account.html" class="btn btn_secondary right_down_space">To your account</a>
       </p>
     </section>
 
-    <div class="container">
-      <div id="tokens"></div>
-      <div id="report_popup"></div>
+    <div class="container" id="main_container">
+      <h2 class="fw-light center">Created haikus</h2>
+      <div id="nothing_crt">
+        <div id="created_tokens"></div>
+      </div>
+      <div class="space_between_lists"></div>
+      <h2 class="fw-light center">Owned haikus</h2>
+      <div id="nothing_own">
+        <div id="owned_tokens"></div>
+      </div>
+      <div id="token_popup"></div>
     </div>
   </main>
 
   <footer class="text-muted py-5">
     <div class="container">
       <p class="float-end mb-1">
-        <a href="/src/html/verification.html">Back to top</a>
+        <a href="/src/html/account.html">Back to top</a>
       </p>
       <p class="mb-1">Project Tezos Haiku written by © <a href="https://github.com/SteMak" target="_blank">SteMak</a>
       </p>
@@ -67,13 +73,23 @@
     </div>
   </footer>
 
+  <script>
+    const url = new URL(window.location.href);
+    const addr = url.searchParams.get("address");
+    const s_addr = (addr || '').length > 20 ? addr.slice(0, 7) + '...' + addr.slice(-7) : addr
+    if (addr) {
+      document.title = `Tezos Haiku - ${addr}`;
+      document.getElementById('welcome').innerHTML = `Welcome to account of <a style="font-size: smaller;font-family: monospace;">${s_addr}</a>`
+      document.getElementById('desc').innerHTML = `Here you can see haikus that <a style="word-break: break-all;font-size: smaller;font-family: monospace;">${addr}</a> have written or bought.`
+    }
+  </script>
   <script src="/src/js/united.js"></script>
   <script>
-    var connect_wallet, disconnect_wallet, report_open, report_close
+    var info_open, token_close
     alien_link = new URL(document.getElementById('alien_link').href).pathname;
     account_link = new URL(document.getElementById('account_link').href).pathname;
   </script>
-  <script type="module" src="/src/js/verification.js"></script>
+  <script type="module" src="/src/js/alien_account.js"></script>
 </body>
 
 </html>

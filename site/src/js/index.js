@@ -117,7 +117,7 @@ buy_open = async (id) => {
         ${t.image}
       </div>
       <div class="buy_body">
-        <div class="card buy_card">Creator: ${t.creator.slice(0, 7)}...${t.creator.slice(-7)}</div>
+        <div class="card buy_card">Creator: ${t.creator == user_addr ? `<a class="alien" href="${account_link}" target="_blank">you</a>` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank">${t.creator.slice(0, 7)}...${t.creator.slice(-7)}</a>`}</div>
         <div class="card buy_card">Created at: ${t.crted_at.toGMTString().split(', ')[1]}</div>
         <div class="card buy_card">Total supply: ${t.amount}</div>
         ${user_addr ? `<div class="card buy_card">You own: ${data.owners.filter(c => c.owner == user_addr && c.token_id == t.id).reduce((a, c) => a + c.count, 0)}</div>` : ""}

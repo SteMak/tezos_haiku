@@ -148,7 +148,7 @@ const main_start = () => {
         <div class="card token">
           ${t.image}
           <div class="card-body state_type_${statuses_d[t.state]}">
-            <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+            <p class="card-text">Haiku #${t.id} written by you</p>
             <div class="d-flex justify-content-between align-items-center">
               <button type="button" id="update_button-${t.id}" class="btn btn-sm btn-outline-secondary verify_button">VERIFY</button>
             </div>
@@ -160,7 +160,7 @@ const main_start = () => {
         <div class="card token" onclick="info_open(${t.id})">
           ${t.image}
           <div class="card-body state_type_${statuses_d[t.state]}">
-            <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+            <p class="card-text">Haiku #${t.id} written by you</p>
             <b class="card-text">${min_price !== Infinity ? `Price starts from <a style="font-family:monospace;">${min_price / 1000000}tz</a>` : `Not for sale :(`}</b>
             <p></p>
             <div class="d-flex justify-content-between align-items-center">
@@ -182,7 +182,7 @@ const main_start = () => {
     document.getElementById("owned_tokens").innerHTML += `<div class="card token" onclick="sell_open(${t.id})">
       ${t.image}
       <div class="card-body">
-        <p class="card-text">Haiku #${t.id} written by <a style="font-family:monospace; font-size: initial;">${t.creator}</a></p>
+        <p class="card-text">Haiku #${t.id} written by ${t.creator == user_addr ? `you` : `<a style="font-family:monospace; font-size: initial;">${t.creator}</a>`}</p>
         <b class="card-text">${min_price !== Infinity ? `Price starts from <a style="font-family:monospace;">${min_price / 1000000}tz</a>` : `Not for sale :(`}</b>
         <p></p>
         <div class="d-flex justify-content-between align-items-center">
@@ -206,7 +206,7 @@ info_open = (id) => {
         ${t.image}
       </div>
       <div class="buy_body">
-        <div class="card buy_card">Creator: ${t.creator.slice(0, 7)}...${t.creator.slice(-7)}</div>
+        <div class="card buy_card">Creator: you</div>
         <div class="card buy_card">Created at: ${t.crted_at.toGMTString().split(', ')[1]}</div>
         <div class="card buy_card">Status: ${statuses[t.state]}</div>
         <div class="card buy_card">Total supply: ${t.amount}</div>
@@ -231,7 +231,7 @@ sell_open = (id) => {
         ${t.image}
       </div>
       <div class="buy_body">
-        <div class="card buy_card">Creator: ${t.creator.slice(0, 7)}...${t.creator.slice(-7)}</div>
+        <div class="card buy_card">Creator: ${t.creator == user_addr ? `you` : `<a class="alien" href="${alien_link}?address=${t.creator}" target="_blank">${t.creator.slice(0, 7)}...${t.creator.slice(-7)}</a>`}</div>
         <div class="card buy_card">Created at: ${t.crted_at.toGMTString().split(', ')[1]}</div>
         <div class="card buy_card">Total supply: ${t.amount}</div>
         ${user_addr ? `<div class="card buy_card">You own: ${max_amount}</div>` : ""}
@@ -268,10 +268,7 @@ new_haiku_open = () => {
         <div class="buy_body">
           <div class="buy_inputs">
             <label for="mint_c" class="buy_label">Choose colors of background and text</label>
-            <div class="card buy_card">
-              Backgroung: <input type="color" class="form_color" value="#000000" id="mint_c_b">
-              Text: <input type="color" class="form_color right_empty" value="#ffffff" id="mint_c_t"></p>
-            </div>
+            <div class="card buy_card">Backgroung: <input type="color" class="form_color" value="#000000" id="mint_c_b">  Text: <input type="color" class="form_color right_empty" value="#ffffff" id="mint_c_t"></div>
             <label for="mint_amount" class="buy_label">Choose how many items of haiku you want to mint</label>
             <input type="number" class="form_number" min="1" max="${max_mint_amount}" value="7" step="1" id="mint_amount">
             <label for="mint_cont" class="buy_label">Provide yours haiku text below</label>
@@ -346,7 +343,7 @@ const token_update_state = async (id, state) => {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => { dom_loaded = true; main_start() })
+document.addEventListener("DOMContentLoaded", () => { alien_link = new URL(document.getElementById('alien_link').href).pathname; dom_loaded = true; main_start() })
 document.addEventListener('click', e => {
   if (e.target.id == 'popup_overlay') token_close()
   if (e.target.id == 'new_haiku_big_button' || e.target.id == 'new_haiku_button') {
