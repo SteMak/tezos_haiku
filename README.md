@@ -1,9 +1,9 @@
 # Tezos Haiku
 NFT-haiku marketplace with verification of copyright using DAO.
 
-[Demo on YouTube](https://www.youtube.com/watch?v=kIpb1D33YcE)
+### [Demo on YouTube](https://www.youtube.com/watch?v=kIpb1D33YcE)
 
-[WHITEPAPER](https://github.com/SteMak/tezos_haiku/blob/master/WHITEPAPER.md)
+### [WHITEPAPER](https://github.com/SteMak/tezos_haiku/blob/master/WHITEPAPER.md)
 
 ## General idea
 ### "The best material model of a cat is another, or preferably the same, cat." (Norbert Wiener)
