@@ -1,6 +1,6 @@
 # WHITEPAPER
 ## Abstract
-Tezos haiku is an NFT marketplace, where NFT tokens are haiku, a known Japanese type of poetry. Here users can create tokens, participate in verification and make collections.
+Tezos Haiku is an NFT marketplace, where NFT tokens are haiku, a known Japanese type of poetry. Here users can create tokens, participate in verification and make collections.
 
 Key differences from existing NFT projects:
 - Token data completely stores in blockchain (no ipfs or other third party storages used)
