@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate;" viewBox="0 0 1 1" version="1.1" width="32" height="32"><mask id="avatarsRadiusMask"><rect width="1" height="1" rx="0.5" ry="0.5" fill="#fff" x="0" y="0"/></mask><g mask="url(#avatarsRadiusMask)"><rect width="1" height="1" fill="#43A047"/><g transform="translate(0.04, 0.04)"><g transform="scale(0.92)"><text x="50%" y="50%" style=" font-family: Menlo,Monaco,monospace; font-size: 0.8px" fill="#FFF" text-anchor="middle" dy=".4em">H</text></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate;" viewBox="0 0 1 1" version="1.1" width="32" height="32">
+  <mask id="avatarsRadiusMask">
+    <rect width="1" height="1" rx="0.5" ry="0.5" fill="#fff" x="0" y="0"/>
+  </mask>
+  <g mask="url(#avatarsRadiusMask)">
+    <rect width="1" height="1" fill="#43A047"/>
+    <g transform="translate(0.04, 0.04)">
+      <g transform="scale(0.92)">
+        <text x="50%" y="50%" style=" font-family: Menlo,Monaco,monospace; font-size: 0.8px" fill="#FFF" text-anchor="middle" dy=".4em">
+          H
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>
